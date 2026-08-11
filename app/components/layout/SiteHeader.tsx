@@ -67,7 +67,7 @@ export function SiteHeader() {
     <header className="site-header">
       <div className="shell header-inner">
         <a className="wordmark-link" href="#top" aria-label="Threvelonbase home">
-          <Wordmark />
+          <Wordmark compact />
         </a>
 
         <nav

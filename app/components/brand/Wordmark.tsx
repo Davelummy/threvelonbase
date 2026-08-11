@@ -1,45 +1,53 @@
 type WordmarkProps = {
   reversed?: boolean;
+  /** Hide the tagline under the name (cleaner for headers). */
+  compact?: boolean;
   className?: string;
 };
 
-export function Wordmark({ reversed = false, className = "" }: WordmarkProps) {
+export function Wordmark({
+  reversed = false,
+  compact = false,
+  className = "",
+}: WordmarkProps) {
   return (
-    <span className={`wordmark ${className}`.trim()} data-reversed={reversed ? "true" : "false"}>
+    <span
+      className={`wordmark ${compact ? "wordmark-compact" : ""} ${className}`.trim()}
+      data-reversed={reversed ? "true" : "false"}
+      data-compact={compact ? "true" : "false"}
+    >
       {reversed ? (
         <img
           className="wordmark-mark"
           src="/brand/tb-mark-reversed.svg"
-          width="48"
-          height="48"
+          width="40"
+          height="40"
           alt=""
           aria-hidden="true"
         />
       ) : (
         <>
-          {/* Light-surface mark */}
           <img
             className="wordmark-mark wordmark-mark-light"
             src="/brand/tb-mark.svg"
-            width="48"
-            height="48"
+            width="40"
+            height="40"
             alt=""
             aria-hidden="true"
           />
-          {/* Dark-surface mark (header in dark mode) */}
           <img
             className="wordmark-mark wordmark-mark-dark"
             src="/brand/tb-mark-reversed.svg"
-            width="48"
-            height="48"
+            width="40"
+            height="40"
             alt=""
             aria-hidden="true"
           />
         </>
       )}
       <span className="brand-copy">
-        <strong>THREVELONBASE</strong>
-        <small>Technology Evolution and Revolution</small>
+        <strong>Threvelonbase</strong>
+        {!compact ? <small>Technology Evolution and Revolution</small> : null}
       </span>
     </span>
   );
