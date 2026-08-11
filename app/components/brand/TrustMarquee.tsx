@@ -1,19 +1,13 @@
-import {
-  Clock3,
-  MapPin,
-  MessageCircle,
-  ShieldCheck,
-  Wrench,
-} from "lucide-react";
+import { Clock3, MapPin, ShieldCheck, Wrench } from "lucide-react";
 import { business } from "../../data/business";
 import { trustMarqueeItems } from "../../data/content";
+import { WhatsAppIcon } from "./WhatsAppIcon";
 
 const iconMap = {
   shield: ShieldCheck,
   map: MapPin,
   clock: Clock3,
   wrench: Wrench,
-  whatsapp: MessageCircle,
 } as const;
 
 function TrustItem({
@@ -21,14 +15,19 @@ function TrustItem({
   label,
   sublabel,
 }: {
-  icon: keyof typeof iconMap;
+  icon: "shield" | "map" | "clock" | "wrench" | "whatsapp";
   label: string;
   sublabel: string;
 }) {
-  const Icon = iconMap[icon];
+  const LucideIcon = icon === "whatsapp" ? null : iconMap[icon];
+
   return (
     <div className="trust-marquee-item">
-      <Icon aria-hidden="true" size={14} />
+      {icon === "whatsapp" ? (
+        <WhatsAppIcon size={14} />
+      ) : LucideIcon ? (
+        <LucideIcon aria-hidden="true" size={14} />
+      ) : null}
       <div>
         <span className="trust-marquee-label">{label}</span>
         <span className="trust-marquee-sub">{sublabel}</span>

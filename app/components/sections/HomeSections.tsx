@@ -24,6 +24,7 @@ import {
 import { business } from "../../data/business";
 import { repairTypes, serviceCards } from "../../data/content";
 import { enquiryMessage, whatsappHref } from "../../../lib/whatsapp";
+import { WhatsAppIcon } from "../brand/WhatsAppIcon";
 import { RepairForm } from "../forms/RepairForm";
 
 const iconMap = {
@@ -250,12 +251,23 @@ export function ContactSection() {
           <a href={business.phones[1].href}><Phone aria-hidden="true" /><span><strong>Alternative line</strong>{business.phones[1].display}</span></a>
           <div><Clock3 aria-hidden="true" /><span><strong>Business hours</strong><time dateTime="Mo-Sa 08:00-18:00">{business.hours.days}<br />{business.hours.display}</time></span></div>
         </div>
-        <a className="contact-whatsapp gs-hidden" data-gs="fade-up" target="_blank" rel="noreferrer" href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry about a repair, phone, accessory, training, or business service.")}><MessageCircle aria-hidden="true" /><span><strong>Chat on WhatsApp</strong>Usually the fastest way to reach us</span><ArrowRight aria-hidden="true" /></a>
+        <a className="contact-whatsapp gs-hidden" data-gs="fade-up" target="_blank" rel="noreferrer" href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry about a repair, phone, accessory, training, or business service.")}><WhatsAppIcon size={27} /><span><strong>Chat on WhatsApp</strong>Usually the fastest way to reach us</span><ArrowRight aria-hidden="true" /></a>
       </div>
     </section>
   );
 }
 
 export function FloatingWhatsApp() {
-  return <a className="floating-whatsapp" target="_blank" rel="noreferrer" aria-label="Chat with Threvelonbase on WhatsApp" href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry.")}><MessageCircle aria-hidden="true" /></a>;
+  return (
+    <a
+      className="floating-whatsapp"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Chat with Threvelonbase on WhatsApp"
+      href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry.")}
+    >
+      <span className="floating-whatsapp-glass" aria-hidden="true" />
+      <WhatsAppIcon size={28} className="floating-whatsapp-icon" />
+    </a>
+  );
 }
