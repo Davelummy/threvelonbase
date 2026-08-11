@@ -151,7 +151,9 @@ img { display: block; max-width: 100%; }
 .header-inner { min-height: 84px; display: flex; align-items: center; justify-content: space-between; gap: 30px; }
 .wordmark-link { display: inline-flex; align-items: center; min-height: 48px; }
 .wordmark { display: inline-flex; align-items: center; gap: 11px; flex: 0 0 auto; }
-.wordmark > img { width: 48px; height: 48px; flex: 0 0 auto; }
+.wordmark-mark { width: 48px; height: 48px; flex: 0 0 auto; }
+.wordmark-mark-dark { display: none; }
+.wordmark-mark-light { display: block; }
 .brand-copy { display: flex; flex-direction: column; line-height: 1; }
 .brand-copy strong { color: var(--navy); font-size: var(--text-h3); font-weight: var(--weight-black); letter-spacing: var(--tracking-display); font-family: var(--font-body); }
 .brand-copy small { margin-top: 6px; color: var(--orange-readable); font-size: var(--text-2xs); font-weight: var(--weight-bold); letter-spacing: var(--tracking-label); text-transform: uppercase; }
@@ -611,9 +613,12 @@ footer { background: #071725; color: white; padding: 70px 0 24px; }
 .service-intro, .process, .commerce, .business, .contact { border-top: 1px solid var(--section-border); }
 .repairs, .request-section, .academy, .values { border-top: 1px solid rgba(255,255,255,.1); }
 
-/* Dark-mode logo: swap to reversed mark via CSS filter on the standard SVG when needed */
-[data-theme="dark"] .wordmark-link .wordmark[data-reversed="false"] > img {
-  filter: brightness(0) invert(1);
+/* Dark-mode header logo: use reversed mark (white + orange), not a CSS invert */
+[data-theme="dark"] .wordmark-link .wordmark[data-reversed="false"] .wordmark-mark-light {
+  display: none;
+}
+[data-theme="dark"] .wordmark-link .wordmark[data-reversed="false"] .wordmark-mark-dark {
+  display: block;
 }
 [data-theme="dark"] .header-inner nav.nav-open {
   background: var(--paper);
@@ -662,7 +667,7 @@ footer { background: #071725; color: white; padding: 70px 0 24px; }
   .shell { width: calc(100% - 34px); }
   .announcement { display: none; }
   .header-inner { min-height: 72px; }
-  .wordmark > img { width: 42px; height: 42px; }
+  .wordmark-mark { width: 42px; height: 42px; }
   .brand-copy strong { font-size: 16px; }
   .brand-copy small { display: none; }
   .hero { min-height: auto; padding: 45px 0 65px; }
