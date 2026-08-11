@@ -7,28 +7,53 @@ accessories, technical training and business services to WhatsApp.
 ## Stack and Lifecycle
 
 - Node.js `>=22.13.0`
-- Vite with [Vinext](https://github.com/cloudflare/vinext) and the Cloudflare
-  Vite plugin
-- Cloudflare Sites deployment through the checked-in `package-lock.json`
+- App Router under `app/` (shared source for both hosts)
+- Local/ChatGPT Sites: Vite with [Vinext](https://github.com/cloudflare/vinext)
+  and the Cloudflare Vite plugin
+- Production host: **Netlify** (standard `next build` + OpenNext adapter)
 
-The Sites lifecycle installs dependencies before a checkout is returned. Edit
-the source under `app/` and checkpoint coherent changes; the remote builder runs
-`npm run build` against the pushed commit. This project does not use
-`wrangler.jsonc`.
+This project does not use `wrangler.jsonc`. Cloudflare D1/R2 remain unconfigured.
 
-Useful commands:
+### Netlify (primary production)
 
-- `npm run dev`: run the local Vite/Vinext server
-- `npm run start`: serve the built Vinext application
-- `npm run build`: build and validate the Sites artifact
-- `npm test`: build, validate, and test rendered HTML contracts
-- `npm run validate:artifact`: validate an existing build artifact
+1. Connect the GitHub repo in Netlify.
+2. Build command: `npm run build:netlify` (already set in `netlify.toml`).
+3. Node version: `22.13.0` (set in `netlify.toml`).
+4. In **Site settings → Environment variables**, set:
+
+   | Variable | Example |
+   | --- | --- |
+   | `NEXT_PUBLIC_SITE_URL` | `https://your-site.netlify.app` or your custom domain |
+
+   Use the final public origin only (scheme + host, no path). Without it the
+   site still deploys; absolute canonical/OG/sitemap/JSON-LD URLs stay omitted
+   by design.
+
+5. Deploy. Netlify’s Next.js runtime handles SSR/static assets automatically.
+
+Useful Netlify commands locally (optional CLI):
+
+- `npm run build:netlify` then `npm run start:next`
+
+### Sites / Vinext (local + optional ChatGPT Sites)
+
+The Sites lifecycle may install dependencies before a checkout is returned and
+run `npm run build` / `npm run build:sites` against the pushed commit.
 
 `npm run install:ci` is a bounded, non-retrying `npm ci`. The install and build
 helpers target the Linux Sites environment and require `flock`, `curl`,
 `sha256sum`, and GNU `timeout`; they are not native macOS install/build scripts.
 Project-scoped HOME, npm cache, XDG, temporary files and Wrangler logs are
 provided by `scripts/sites-env.sh`. `.sites-runtime/` is disposable.
+
+Useful commands:
+
+- `npm run dev`: run the local Vite/Vinext server
+- `npm run start`: serve the built Vinext application
+- `npm run build` / `npm run build:sites`: build and validate the Sites artifact
+- `npm run build:netlify`: production Next.js build for Netlify
+- `npm test`: Sites build + rendered HTML / repair enquiry contract tests
+- `npm run validate:artifact`: validate an existing Sites build artifact
 
 ## ChatGPT Sites Auth
 

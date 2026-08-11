@@ -170,7 +170,21 @@ export function AcademySection() {
   return (
     <section className="academy section" id="academy">
       <div className="shell academy-grid">
-        <div className="academy-art"><span className="academy-kicker">PRACTICAL LEARNING</span><div className="academy-symbol"><BookOpen aria-hidden="true" /></div><div className="academy-stat"><strong>Hands-on</strong><span>repair training & mentorship</span></div></div>
+        <div className="academy-art">
+          <img
+            className="academy-photo"
+            src="/images/threvelonbase-academy-hands-on.jpg"
+            alt="A mentor guiding a trainee through hands-on smartphone board repair at the workshop bench"
+            width="864"
+            height="1152"
+            loading="lazy"
+          />
+          <span className="academy-kicker">PRACTICAL LEARNING</span>
+          <div className="academy-stat">
+            <strong>Hands-on</strong>
+            <span>repair training & mentorship</span>
+          </div>
+        </div>
         <div className="academy-copy">
           <p className="eyebrow light"><span /> Threvelonbase Academy</p><h2>Learn the repair skill—and the discipline behind it.</h2>
           <p>The training programme combines supervised mobile-phone repair practice with customer service, business ethics, punctuality and professional conduct.</p>

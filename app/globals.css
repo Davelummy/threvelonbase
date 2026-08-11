@@ -171,16 +171,13 @@ img { display: block; max-width: 100%; }
 
 .academy { background: var(--navy); color: white; }
 .academy-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 90px; align-items: center; }
-.academy-art { position: relative; min-height: 540px; padding: 36px; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: radial-gradient(circle at 70% 25%, rgba(255,122,0,.3), transparent 34%), linear-gradient(145deg,#123d73,#061936); overflow: hidden; }
-.academy-art::before, .academy-art::after { content: ""; position: absolute; border: 1px solid rgba(255,122,0,.5); border-radius: 50%; }
-.academy-art::before { width: 420px; height: 420px; right: -190px; top: -140px; }
-.academy-art::after { width: 310px; height: 310px; right: -135px; top: -85px; }
-.academy-kicker { color: #ffad72; font-size: 10px; font-weight: 800; letter-spacing: .18em; }
-.academy-symbol { width: 165px; height: 165px; margin: 120px auto 0; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.15); border-radius: 50%; background: rgba(255,255,255,.05); box-shadow: 0 0 0 28px rgba(255,255,255,.025), 0 0 0 56px rgba(255,255,255,.018); }
-.academy-symbol svg { width: 58px; height: 58px; color: var(--orange); }
-.academy-stat { position: absolute; left: 32px; right: 32px; bottom: 30px; display: flex; align-items: end; justify-content: space-between; border-top: 1px solid rgba(255,255,255,.14); padding-top: 20px; }
-.academy-stat strong { font-family: "Fraunces Variable", serif; font-size: 38px; font-weight: 460; }
-.academy-stat span { max-width: 150px; color: rgba(255,255,255,.55); font-size: 11px; line-height: 1.5; text-align: right; }
+.academy-art { position: relative; min-height: 540px; border: 1px solid rgba(255,255,255,.14); border-radius: 24px; background: #061936; overflow: hidden; }
+.academy-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 28%; }
+.academy-art::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,25,54,.28) 0%, rgba(6,25,54,.12) 42%, rgba(6,25,54,.78) 100%); pointer-events: none; }
+.academy-kicker { position: absolute; z-index: 1; top: 28px; left: 28px; padding: 8px 12px; border-radius: 999px; color: #ffad72; background: rgba(6,25,54,.72); backdrop-filter: blur(10px); font-size: 10px; font-weight: 800; letter-spacing: .18em; }
+.academy-stat { position: absolute; z-index: 1; left: 28px; right: 28px; bottom: 28px; display: flex; align-items: end; justify-content: space-between; gap: 16px; padding: 18px 20px; border: 1px solid rgba(255,255,255,.14); border-radius: 14px; background: rgba(6,25,54,.78); backdrop-filter: blur(14px); }
+.academy-stat strong { font-family: "Fraunces Variable", serif; font-size: 34px; font-weight: 460; color: white; }
+.academy-stat span { max-width: 150px; color: rgba(255,255,255,.72); font-size: 11px; line-height: 1.5; text-align: right; }
 .academy-copy h2 { max-width: 590px; font-size: clamp(48px, 5vw, 72px); }
 .academy-copy > p:not(.eyebrow) { margin: 26px 0 30px; color: rgba(255,255,255,.64); line-height: 1.8; }
 .academy-points { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 35px; }
@@ -287,6 +284,7 @@ footer { background: #071725; color: white; padding: 70px 0 24px; }
   .request-copy { position: static; }
   .commerce-grid { grid-template-columns: 1fr; }
   .academy-art { min-height: 460px; }
+  .academy-photo { object-position: center 24%; }
   .contact-grid { gap: 45px; }
 }
 
@@ -322,9 +320,10 @@ footer { background: #071725; color: white; padding: 70px 0 24px; }
   .commerce-feature { min-height: 0; padding: 32px 25px; }
   .commerce-icon { margin-bottom: 35px; }
   .academy-art { min-height: 390px; }
-  .academy-symbol { margin-top: 85px; width: 125px; height: 125px; }
-  .academy-stat { flex-direction: column; align-items: flex-start; gap: 8px; }
-  .academy-stat span { text-align: left; }
+  .academy-kicker { top: 18px; left: 18px; }
+  .academy-stat { left: 16px; right: 16px; bottom: 16px; flex-direction: column; align-items: flex-start; gap: 6px; padding: 16px; }
+  .academy-stat strong { font-size: 28px; }
+  .academy-stat span { text-align: left; max-width: none; }
   .business-grid { display: grid; }
   .business-grid article { min-height: 280px; }
   .business-cta { align-items: flex-start; flex-direction: column; }
