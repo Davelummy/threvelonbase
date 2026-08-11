@@ -667,7 +667,6 @@ footer { background: #071725; color: white; padding: 70px 0 24px; }
   .brand-copy small { display: none; }
   .hero { min-height: auto; padding: 45px 0 65px; }
   .hero-grid { gap: 45px; }
-  .hero h1 { font-size: clamp(47px, 14vw, 62px); line-height: .98; }
   .hero-lead { font-size: var(--text-base); }
   .hero-actions { display: grid; grid-template-columns: 1fr; gap: 12px; }
   .button { width: 100%; }
