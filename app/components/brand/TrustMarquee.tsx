@@ -23,50 +23,69 @@ function TrustItem({
 
   return (
     <div className="trust-marquee-item">
-      {icon === "whatsapp" ? (
-        <WhatsAppIcon size={14} />
-      ) : LucideIcon ? (
-        <LucideIcon aria-hidden="true" size={14} />
-      ) : null}
-      <div>
+      <span className="trust-marquee-icon" aria-hidden="true">
+        {icon === "whatsapp" ? (
+          <WhatsAppIcon size={16} />
+        ) : LucideIcon ? (
+          <LucideIcon size={16} />
+        ) : null}
+      </span>
+      <span className="trust-marquee-copy">
         <span className="trust-marquee-label">{label}</span>
         <span className="trust-marquee-sub">{sublabel}</span>
-      </div>
+      </span>
+    </div>
+  );
+}
+
+function TrustGroup({
+  items,
+  hidden,
+}: {
+  items: Array<{
+    id: string;
+    icon: "shield" | "map" | "clock" | "wrench" | "whatsapp";
+    label: string;
+    sublabel: string;
+  }>;
+  hidden?: boolean;
+}) {
+  return (
+    <div className="trust-marquee-group" aria-hidden={hidden || undefined}>
+      {items.map((item) => (
+        <TrustItem
+          key={`${hidden ? "dup" : "src"}-${item.id}`}
+          icon={item.icon}
+          label={item.label}
+          sublabel={item.sublabel}
+        />
+      ))}
     </div>
   );
 }
 
 export function TrustMarquee() {
   const items = trustMarqueeItems.map((item) => ({
-    ...item,
+    id: item.id,
+    icon: item.icon,
     label:
       item.id === "location"
         ? `${business.address.shop}, ${business.address.locality}`
         : item.label,
     sublabel:
-      item.id === "location"
-        ? business.address.complex
-        : item.id === "hours"
-          ? `${business.hours.days}, ${business.hours.display}`
-          : item.id === "established"
-            ? `Hands-on repair experience since ${business.established}`
-            : item.sublabel,
+      item.id === "hours"
+        ? `${business.hours.display}`
+        : item.sublabel,
   }));
 
-  // Duplicate the list so the CSS translate(-50%) loop is seamless.
-  const loop = [...items, ...items];
-
+  // Two equal groups → translateX(-50%) is an exact seamless loop on all widths.
   return (
     <div className="trust-marquee" aria-label="Trust signals">
-      <div className="trust-marquee-track">
-        {loop.map((item, index) => (
-          <TrustItem
-            key={`${item.id}-${index}`}
-            icon={item.icon}
-            label={item.label}
-            sublabel={item.sublabel}
-          />
-        ))}
+      <div className="trust-marquee-viewport">
+        <div className="trust-marquee-track">
+          <TrustGroup items={items} />
+          <TrustGroup items={items} hidden />
+        </div>
       </div>
     </div>
   );

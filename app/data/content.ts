@@ -98,13 +98,13 @@ export const trustMarqueeItems = [
     id: "established",
     icon: "shield",
     label: "Since 2020",
-    sublabel: "Hands-on repair experience",
+    sublabel: "Hands-on experience",
   },
   {
     id: "location",
     icon: "map",
     label: "Shop 12A, Akure",
-    sublabel: "Cash Hold Shopping Complex",
+    sublabel: "Cash Hold Complex",
   },
   {
     id: "hours",
@@ -116,12 +116,12 @@ export const trustMarqueeItems = [
     id: "diagnosis",
     icon: "wrench",
     label: "Diagnosis first",
-    sublabel: "Price approved before work",
+    sublabel: "Approve price first",
   },
   {
     id: "whatsapp",
     icon: "whatsapp",
     label: "WhatsApp enquiries",
-    sublabel: "Fastest way to reach us",
+    sublabel: "Fastest contact path",
   },
 ] as const;
