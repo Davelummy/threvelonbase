@@ -3,6 +3,7 @@ import "@fontsource-variable/fraunces";
 import "@fontsource-variable/manrope";
 import "./globals.css";
 import { LocalBusinessJsonLd } from "./components/brand/LocalBusinessJsonLd";
+import { themeBootstrapScript } from "./components/theme/ThemeToggle";
 import { business, siteOrigin } from "./data/business";
 
 const homepageTitle = `${business.name} | Electronics Repairs, Devices & Training in Akure`;
@@ -53,7 +54,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootstrapScript }} />
+      </head>
       <body>
         {children}
         <LocalBusinessJsonLd />

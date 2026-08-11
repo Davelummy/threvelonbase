@@ -5,7 +5,7 @@ type WordmarkProps = {
 
 export function Wordmark({ reversed = false, className = "" }: WordmarkProps) {
   return (
-    <span className={`wordmark ${className}`.trim()}>
+    <span className={`wordmark ${className}`.trim()} data-reversed={reversed ? "true" : "false"}>
       <img
         src={reversed ? "/brand/tb-mark-reversed.svg" : "/brand/tb-mark.svg"}
         width="48"

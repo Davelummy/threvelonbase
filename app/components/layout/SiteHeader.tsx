@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { business } from "../../data/business";
 import { navItems } from "../../data/content";
 import { Wordmark } from "../brand/Wordmark";
+import { ThemeToggle } from "../theme/ThemeToggle";
 
 export function AnnouncementBar() {
   return (
@@ -80,19 +81,23 @@ export function SiteHeader() {
             <a key={href} href={href} onClick={closeMenu}>{label}</a>
           ))}
           <a className="nav-cta" href="#repair-request" onClick={closeMenu}>Start a repair</a>
+          <ThemeToggle className="theme-toggle-nav" />
         </nav>
 
-        <button
-          ref={menuButtonRef}
-          className="menu-button"
-          type="button"
-          aria-label={menuOpen ? "Close navigation" : "Open navigation"}
-          aria-expanded={menuOpen}
-          aria-controls="primary-navigation"
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
-        </button>
+        <div className="header-actions">
+          <ThemeToggle className="theme-toggle-bar" />
+          <button
+            ref={menuButtonRef}
+            className="menu-button"
+            type="button"
+            aria-label={menuOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={menuOpen}
+            aria-controls="primary-navigation"
+            onClick={() => setMenuOpen((open) => !open)}
+          >
+            {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+          </button>
+        </div>
       </div>
     </header>
   );
