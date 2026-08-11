@@ -8,22 +8,36 @@ import { Wordmark } from "../brand/Wordmark";
 
 export function AnnouncementBar() {
   return (
-    <div className="announcement">
-      <div className="shell announcement-inner">
-        <span><i /> Repair workshop open Monday-Saturday, 8:00 AM-6:00 PM</span>
-        <a href={business.phones[0].href}><Phone size={14} /> {business.phones[0].display}</a>
+    <>
+      <a className="skip-link" href="#main-content">Skip to content</a>
+      <div className="announcement">
+        <div className="shell announcement-inner">
+          <span><i /> Repair workshop open Monday-Saturday, 8:00 AM-6:00 PM</span>
+          <a href={business.phones[0].href}><Phone aria-hidden="true" size={14} /> {business.phones[0].display}</a>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 
 export function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobileNav, setIsMobileNav] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
+  const navRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 820px)");
+    const updateMobileNav = () => setIsMobileNav(mediaQuery.matches);
+
+    updateMobileNav();
+    mediaQuery.addEventListener("change", updateMobileNav);
+    return () => mediaQuery.removeEventListener("change", updateMobileNav);
+  }, []);
 
   useEffect(() => {
     function closeOnEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
+      if (event.key === "Escape" && menuOpen) {
         setMenuOpen(false);
         menuButtonRef.current?.focus();
       }
@@ -31,7 +45,18 @@ export function SiteHeader() {
 
     document.addEventListener("keydown", closeOnEscape);
     return () => document.removeEventListener("keydown", closeOnEscape);
-  }, []);
+  }, [menuOpen]);
+
+  useEffect(() => {
+    if (menuOpen && isMobileNav) {
+      navRef.current?.querySelector<HTMLAnchorElement>("a")?.focus();
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMobileNav, menuOpen]);
 
   function closeMenu() {
     setMenuOpen(false);
@@ -45,9 +70,11 @@ export function SiteHeader() {
         </a>
 
         <nav
+          ref={navRef}
           id="primary-navigation"
           className={menuOpen ? "nav-open" : ""}
           aria-label="Primary navigation"
+          aria-hidden={isMobileNav ? !menuOpen : undefined}
         >
           {navItems.map(([label, href]) => (
             <a key={href} href={href} onClick={closeMenu}>{label}</a>

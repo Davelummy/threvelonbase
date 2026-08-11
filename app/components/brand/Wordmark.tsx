@@ -8,6 +8,8 @@ export function Wordmark({ reversed = false, className = "" }: WordmarkProps) {
     <span className={`wordmark ${className}`.trim()}>
       <img
         src={reversed ? "/brand/tb-mark-reversed.svg" : "/brand/tb-mark.svg"}
+        width="48"
+        height="48"
         alt=""
         aria-hidden="true"
       />
