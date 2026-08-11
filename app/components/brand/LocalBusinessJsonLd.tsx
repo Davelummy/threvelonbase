@@ -20,7 +20,12 @@ export function LocalBusinessJsonLd() {
     name: business.name,
     description:
       "Electronics repairs for phones, laptops and everyday devices in Akure, plus phones, accessories, repair training and business services.",
-    telephone: business.phones.map((phone) => phone.display),
+    telephone: business.phones[0].display,
+    contactPoint: business.phones.slice(1).map((phone) => ({
+      "@type": "ContactPoint",
+      telephone: phone.display,
+      contactType: "customer service",
+    })),
     email: business.email,
     address: {
       "@type": "PostalAddress",

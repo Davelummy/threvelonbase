@@ -75,8 +75,16 @@ before(async () => {
   html = await response.text();
 });
 
-test("renders development preview metadata", () => {
-  assert.match(html, developmentPreviewMeta);
+test("does not expose the development preview marker in production HTML", () => {
+  assert.doesNotMatch(html, developmentPreviewMeta);
+});
+
+test("renders production metadata and structured local business data", () => {
+  assert.match(html, /<title>Threvelonbase \| Electronics Repairs, Devices &amp; Training in Akure<\/title>/i);
+  assert.match(html, /property=["']og:title["']/i);
+  assert.match(html, /name=["']twitter:card["']/i);
+  assert.match(html, /type=["']application\/ld\+json["']/i);
+  assert.match(html, /["']@type["']:["']LocalBusiness["']/i);
 });
 
 test("keeps the repair-first H1, CTA, and section anchors", () => {
