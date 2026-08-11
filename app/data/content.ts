@@ -91,3 +91,37 @@ export type EnquiryCategory =
   | "repairBusinessSetup"
   | "institutionalTraining"
   | "consultancy";
+
+/** Verified trust signals for the CTMDS-style marquee (no invented claims). */
+export const trustMarqueeItems = [
+  {
+    id: "established",
+    icon: "shield",
+    label: "Since 2020",
+    sublabel: "Hands-on repair experience",
+  },
+  {
+    id: "location",
+    icon: "map",
+    label: "Shop 12A, Akure",
+    sublabel: "Cash Hold Shopping Complex",
+  },
+  {
+    id: "hours",
+    icon: "clock",
+    label: "Open Mon–Sat",
+    sublabel: "8:00 AM–6:00 PM",
+  },
+  {
+    id: "diagnosis",
+    icon: "wrench",
+    label: "Diagnosis first",
+    sublabel: "Price approved before work",
+  },
+  {
+    id: "whatsapp",
+    icon: "whatsapp",
+    label: "WhatsApp enquiries",
+    sublabel: "Fastest way to reach us",
+  },
+] as const;

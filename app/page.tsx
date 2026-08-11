@@ -1,5 +1,7 @@
+import { TrustMarquee } from "./components/brand/TrustMarquee";
 import { AnnouncementBar, SiteHeader } from "./components/layout/SiteHeader";
 import { Footer } from "./components/layout/Footer";
+import { ScrollMotion } from "./components/motion/ScrollMotion";
 import {
   AcademySection,
   BusinessSection,
@@ -21,6 +23,7 @@ export default function Home() {
       <SiteHeader />
       <main id="main-content">
         <HeroSection />
+        <TrustMarquee />
         <ServicesSection />
         <RepairsSection />
         <ProcessSection />
@@ -33,6 +36,7 @@ export default function Home() {
       </main>
       <Footer />
       <FloatingWhatsApp />
+      <ScrollMotion />
     </>
   );
 }
