@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-labelledby="title">
+  <title id="title">Threvelonbase TB monogram</title>
+  <rect x="7" y="7" width="114" height="114" rx="28" fill="#fff" stroke="#0B2D5B" stroke-width="10"/>
+  <path fill="#0B2D5B" d="M28 28h60v18H70v57H49V46H28z"/>
+  <path fill="#FF7A00" fill-rule="evenodd" d="M68 28h17c18 0 29 8 29 22 0 9-5 15-13 19 10 3 16 11 16 21 0 17-13 27-34 27H68V99h15c8 0 13-4 13-10s-5-10-13-10H68V61h14c7 0 11-3 11-8 0-5-4-8-11-8H68V28z"/>
+  <path fill="#FF7A00" d="M20 61h66v18H20z"/>
+</svg>

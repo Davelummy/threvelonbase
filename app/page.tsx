@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import Image from "next/image";
 import {
   ArrowRight,
   BadgeCheck,
@@ -129,7 +128,8 @@ export default function Home() {
       <header className="site-header">
         <div className="shell header-inner">
           <a className="wordmark" href="#top" aria-label="Threvelonbase home">
-            <span>THREVELONBASE</span><b aria-hidden="true" />
+            <img src="/brand/tb-mark.svg" alt="" aria-hidden="true" />
+            <span className="brand-copy"><strong>THREVELONBASE</strong><small>Technology Evolution and Revolution</small></span>
           </a>
 
           <nav className={menuOpen ? "nav-open" : ""} aria-label="Primary navigation">
@@ -174,12 +174,12 @@ export default function Home() {
 
           <div className="hero-visual reveal-delay">
             <div className="diagnostic-line" aria-hidden="true" />
-            <Image
+            <img
               src="/images/threvelonbase-repair-hero.png"
               alt="An electronics technician carrying out a precision smartphone repair"
-              width={1448}
-              height={1086}
-              priority
+              width="1448"
+              height="1086"
+              fetchPriority="high"
             />
             <div className="visual-chip"><Cpu size={18} /> Precision diagnostics</div>
             <div className="hero-note"><Sparkles size={18} /><span>Hardware + software expertise</span></div>
@@ -369,7 +369,7 @@ export default function Home() {
 
       <footer>
         <div className="shell footer-main">
-          <div><a className="wordmark footer-wordmark" href="#top"><span>THREVELONBASE</span><b /></a><p>Technology Evolution and Revolution.</p></div>
+          <div><a className="wordmark footer-wordmark" href="#top"><img src="/brand/tb-mark-reversed.svg" alt="" aria-hidden="true" /><span className="brand-copy"><strong>THREVELONBASE</strong><small>Technology Evolution and Revolution</small></span></a></div>
           <div><strong>Explore</strong>{navItems.slice(0, 4).map(([label, href]) => <a href={href} key={href}>{label}</a>)}</div>
           <div><strong>Contact</strong><a href={`tel:${PHONE_NUMBER}`}>+234 803 772 2368</a><a href="mailto:threvelonbase@gmail.com">threvelonbase@gmail.com</a><a href="https://instagram.com/threvelonbase" target="_blank" rel="noreferrer">@Threvelonbase</a></div>
         </div>
