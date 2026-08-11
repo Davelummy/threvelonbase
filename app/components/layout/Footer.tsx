@@ -1,30 +1,117 @@
-import { navItems } from "../../data/content";
+import { AtSign, Clock3, Mail, MapPin, Phone } from "lucide-react";
 import { business } from "../../data/business";
+import { navItems } from "../../data/content";
 import { Wordmark } from "../brand/Wordmark";
+
+const addressLine = [
+  business.address.shop,
+  business.address.complex,
+  business.address.street,
+  business.address.locality,
+  business.address.region,
+].join(", ");
 
 export function Footer() {
   return (
-    <footer>
-      <div className="shell footer-main">
-        <div>
-          <a className="footer-wordmark" href="#top" aria-label="Threvelonbase home">
-            <Wordmark reversed />
-          </a>
+    <footer className="site-footer">
+      <div className="footer-glow" aria-hidden="true" />
+      <div className="shell footer-shell">
+        <div className="footer-top">
+          <div className="footer-brand">
+            <a className="footer-wordmark" href="#top" aria-label="Threvelonbase home">
+              <Wordmark reversed />
+            </a>
+            <p className="footer-tagline">{business.tagline}</p>
+            <p className="footer-blurb">
+              Electronics repairs, devices and practical technical training from Shop 12A,
+              Cash Hold Shopping Complex, Akure.
+            </p>
+            <div className="footer-hours">
+              <Clock3 aria-hidden="true" size={16} />
+              <div>
+                <strong>Workshop hours</strong>
+                <span>
+                  {business.hours.days} · {business.hours.display}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="footer-col">
+            <strong className="footer-heading">Explore</strong>
+            <nav className="footer-links" aria-label="Footer navigation">
+              {navItems.map(([label, href]) => (
+                <a href={href} key={href}>
+                  {label}
+                </a>
+              ))}
+              <a href="#repair-request">Start a repair</a>
+            </nav>
+          </div>
+
+          <div className="footer-col">
+            <strong className="footer-heading">Contact</strong>
+            <div className="footer-links footer-contact">
+              {business.phones.map((phone) => (
+                <a href={phone.href} key={phone.href}>
+                  <Phone aria-hidden="true" size={15} />
+                  <span>{phone.display}</span>
+                </a>
+              ))}
+              <a href={`mailto:${business.email}`}>
+                <Mail aria-hidden="true" size={15} />
+                <span>{business.email}</span>
+              </a>
+              <a href={business.instagram} target="_blank" rel="noreferrer">
+                <AtSign aria-hidden="true" size={15} />
+                <span>@threvelonbase</span>
+              </a>
+              <a href={business.mapsUrl} target="_blank" rel="noreferrer">
+                <MapPin aria-hidden="true" size={15} />
+                <span>{addressLine}</span>
+              </a>
+            </div>
+          </div>
+
+          <div className="footer-map-col">
+            <div className="footer-map-head">
+              <strong className="footer-heading">Find the workshop</strong>
+              <a
+                className="footer-map-open"
+                href={business.mapsUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Open in Maps
+              </a>
+            </div>
+            <div className="footer-map">
+              <iframe
+                title="Map of Threvelonbase workshop in Akure"
+                src={business.mapsEmbedUrl}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                allowFullScreen
+              />
+              <a
+                className="footer-map-pin"
+                href={business.mapsUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MapPin aria-hidden="true" size={14} />
+                Shop 12A · Arakale Road
+              </a>
+            </div>
+          </div>
         </div>
-        <div>
-          <strong>Explore</strong>
-          {navItems.slice(0, 4).map(([label, href]) => <a href={href} key={href}>{label}</a>)}
+
+        <div className="footer-bottom">
+          <span>© {new Date().getFullYear()} Threvelonbase</span>
+          <span className="footer-values">
+            Performance · Precision · Professionalism · Godliness
+          </span>
         </div>
-        <div>
-          <strong>Contact</strong>
-          {business.phones.map((phone) => <a href={phone.href} key={phone.href}>{phone.display}</a>)}
-          <a href={`mailto:${business.email}`}>{business.email}</a>
-          <a href={business.instagram} target="_blank" rel="noreferrer">@Threvelonbase</a>
-        </div>
-      </div>
-      <div className="shell footer-bottom">
-        <span>© {new Date().getFullYear()} Threvelonbase</span>
-        <span>Performance · Precision · Professionalism · Godliness</span>
       </div>
     </footer>
   );

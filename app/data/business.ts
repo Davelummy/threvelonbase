@@ -18,6 +18,9 @@ export const business = {
   },
   mapsUrl:
     "https://maps.google.com/?q=Shop+12A+Cash+Hold+Shopping+Complex+Arakale+Road+Akure",
+  // Embeddable live map (same query as mapsUrl). No API key required.
+  mapsEmbedUrl:
+    "https://maps.google.com/maps?q=Shop+12A+Cash+Hold+Shopping+Complex+Arakale+Road+Akure&z=16&hl=en&output=embed",
   hours: {
     days: "Monday-Saturday",
     display: "8:00 AM-6:00 PM",
