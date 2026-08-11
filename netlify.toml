@@ -1,25 +1,24 @@
 # Threvelonbase — Netlify production host
-# Docs: https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/
+# https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/
+#
+# IMPORTANT: If Site settings → Build & deploy override these values, clear
+# the UI overrides so this file wins (or keep UI command as `npm run build`).
+# Netlify always sets NETLIFY=true, which makes `npm run build` run `next build`.
 
 [build]
-  command = "npm run build:netlify"
-  # Publish is managed by Netlify's Next.js/OpenNext adapter. Do not set
-  # publish = ".next" or "out" for this App Router app.
+  command = "npm run build"
+  # Leave publish empty for the OpenNext Next.js plugin. Do not set
+  # publish = ".next" in the Netlify UI — the plugin owns the publish dir.
+  publish = ".next"
 
 [build.environment]
   NODE_VERSION = "22.13.0"
-  # Required for correct absolute SEO URLs (canonical, Open Graph, sitemap,
-  # LocalBusiness JSON-LD). Set this in the Netlify UI for each context:
-  #   Production:  https://your-domain.com   or  https://your-site.netlify.app
-  #   Deploy previews can omit it; SEO absolute URLs stay omitted safely.
-  # NEXT_PUBLIC_SITE_URL = "https://example.com"
+  # Absolute SEO URLs (canonical, Open Graph, sitemap, JSON-LD). Set in UI:
+  # NEXT_PUBLIC_SITE_URL = "https://your-site.netlify.app"
 
-# Explicit Next.js runtime plugin (auto-detected on Netlify, listed so the
-# intent is clear for humans and for offline `netlify build` runs).
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
-# Long-cache hashed static assets if any are served from /assets.
 [[headers]]
   for = "/assets/*"
   [headers.values]

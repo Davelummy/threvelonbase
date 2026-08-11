@@ -17,9 +17,12 @@ This project does not use `wrangler.jsonc`. Cloudflare D1/R2 remain unconfigured
 ### Netlify (primary production)
 
 1. Connect the GitHub repo in Netlify.
-2. Build command: `npm run build:netlify` (already set in `netlify.toml`).
-3. Node version: `22.13.0` (set in `netlify.toml`).
-4. In **Site settings → Environment variables**, set:
+2. Prefer **Build settings from `netlify.toml`** (clear UI overrides if the
+   dashboard forced `command` / `publish` earlier). Safe UI values if needed:
+   - **Build command:** `npm run build` (detects Netlify and runs `next build`)
+   - **Publish directory:** leave default / `.next` (OpenNext plugin)
+   - **Node:** `22.13.0`
+3. In **Site settings → Environment variables**, set:
 
    | Variable | Example |
    | --- | --- |
@@ -29,11 +32,11 @@ This project does not use `wrangler.jsonc`. Cloudflare D1/R2 remain unconfigured
    site still deploys; absolute canonical/OG/sitemap/JSON-LD URLs stay omitted
    by design.
 
-5. Deploy. Netlify’s Next.js runtime handles SSR/static assets automatically.
+4. Deploy. Netlify’s Next.js runtime handles SSR/static assets automatically.
 
 Useful Netlify commands locally (optional CLI):
 
-- `npm run build:netlify` then `npm run start:next`
+- `NETLIFY=true npm run build` or `npm run build:netlify`, then `npm run start:next`
 
 ### Sites / Vinext (local + optional ChatGPT Sites)
 
