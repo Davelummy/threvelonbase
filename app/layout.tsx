@@ -17,8 +17,7 @@ const originMetadata: Metadata = siteOrigin
     }
   : {};
 
-// The existing preview contract is useful outside production. Never expose
-// its development marker in a production build or production request.
+// Development-only preview marker for local/Sites hosts. Never emit it in production.
 const previewMetadata =
   process.env.NODE_ENV === "production"
     ? {}
