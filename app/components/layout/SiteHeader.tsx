@@ -91,17 +91,23 @@ export function SiteHeader() {
             </a>
           ))}
           <a
-            className="nav-cta"
+            className="nav-cta nav-cta-menu"
             href={homeSectionHref("#repair-request", pathname)}
             onClick={closeMenu}
           >
             Start a repair
           </a>
-          <ThemeToggle className="theme-toggle-nav" />
         </nav>
 
         <div className="header-actions">
-          <ThemeToggle className="theme-toggle-bar" />
+          <a
+            className="nav-cta nav-cta-bar"
+            href={homeSectionHref("#repair-request", pathname)}
+            onClick={closeMenu}
+          >
+            Start a repair
+          </a>
+          <ThemeToggle />
           <button
             ref={menuButtonRef}
             className="menu-button"

@@ -1,4 +1,5 @@
 import { ChevronDown } from "lucide-react";
+import Link from "next/link";
 import { faqItems } from "../../data/faq";
 
 type FaqSectionProps = {
@@ -35,6 +36,12 @@ export function FaqSection({ heading = "h2", animate = true }: FaqSectionProps) 
             </details>
           ))}
         </div>
+        {heading === "h2" ? (
+          <p className="faq-legal-links">
+            <Link href="/faq">FAQ page</Link>
+            <Link href="/privacy">Privacy</Link>
+          </p>
+        ) : null}
       </div>
     </section>
   );

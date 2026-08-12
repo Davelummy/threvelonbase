@@ -245,8 +245,12 @@ test("renders FAQ answers and legal page links without inventing prices or warra
   assert.match(html, /Does this website take payment or store my repair details\?/);
   assert.doesNotMatch(html, /lifetime warranty|₦|guaranteed same-day/i);
 
+  const main = html.match(/<main\b[\s\S]*?<\/main>/i);
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i);
+  assert.ok(main, "landing page main should be present");
   assert.ok(footer, "footer should be present");
+  assert.match(main[0], /href=["']\/faq["']/);
+  assert.match(main[0], /href=["']\/privacy["']/);
   assert.match(footer[0], /href=["']\/faq["']/);
   assert.match(footer[0], /href=["']\/privacy["']/);
 });

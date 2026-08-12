@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import {
   ArrowRight,
   BadgeCheck,
@@ -187,7 +188,10 @@ export function RepairRequestSection() {
             <li><Check aria-hidden="true" /> Repair timing is confirmed after diagnosis</li>
           </ul>
           <p className="request-privacy">
-            This page does not store repair form submissions in a website account or database. Continuing hands your reviewed message to WhatsApp on your device.
+            This page does not store repair form submissions in a website account or database. Continuing hands your reviewed message to WhatsApp on your device.{" "}
+            <Link href="/privacy">Privacy</Link>
+            {" · "}
+            <Link href="/faq">FAQ</Link>
           </p>
         </div>
         <div className="gs-hidden" data-gs="fade-right">
