@@ -1,10 +1,14 @@
 import type { MetadataRoute } from "next";
 import { absoluteSiteUrl, siteOrigin } from "./data/business";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  // A sitemap URL is only useful when it points at the configured public site.
-  const homepageUrl = absoluteSiteUrl("/");
-  if (!siteOrigin || !homepageUrl) return [];
+const publicPaths = ["/", "/faq", "/privacy"] as const;
 
-  return [{ url: homepageUrl }];
+export default function sitemap(): MetadataRoute.Sitemap {
+  // Sitemap URLs are only useful when they point at the configured public site.
+  if (!siteOrigin) return [];
+
+  return publicPaths.flatMap((path) => {
+    const url = absoluteSiteUrl(path);
+    return url ? [{ url }] : [];
+  });
 }

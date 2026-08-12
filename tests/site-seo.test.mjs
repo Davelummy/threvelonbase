@@ -57,7 +57,7 @@ test("builds absolute SEO URLs used by canonical, Open Graph, JSON-LD, sitemap a
 });
 
 test("metadata, sitemap and robots helpers share the absolute site URL path", async () => {
-  const layout = await readFile(new URL("../app/layout.tsx", import.meta.url), "utf8");
+  const homepage = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
   const robots = await readFile(new URL("../app/robots.ts", import.meta.url), "utf8");
   const sitemap = await readFile(new URL("../app/sitemap.ts", import.meta.url), "utf8");
   const jsonLd = await readFile(
@@ -65,11 +65,12 @@ test("metadata, sitemap and robots helpers share the absolute site URL path", as
     "utf8",
   );
 
-  assert.match(layout, /absoluteSiteUrl\("\/"\)/);
-  assert.match(layout, /canonical:\s*"\/"/);
-  assert.match(layout, /\.\.\.\(homepageUrl \? \{ url: homepageUrl \} : \{\}\)/);
+  assert.match(homepage, /absoluteSiteUrl\("\/"\)/);
+  assert.match(homepage, /canonical:\s*"\/"/);
+  assert.match(homepage, /\.\.\.\(homepageUrl \? \{ url: homepageUrl \} : \{\}\)/);
   assert.match(robots, /absoluteSiteUrl\("\/sitemap\.xml"\)/);
-  assert.match(sitemap, /absoluteSiteUrl\("\/"\)/);
+  assert.match(sitemap, /"\/faq"/);
+  assert.match(sitemap, /"\/privacy"/);
   assert.match(jsonLd, /absoluteSiteUrl\("\/"\)/);
   assert.match(jsonLd, /url: homepageUrl/);
 });

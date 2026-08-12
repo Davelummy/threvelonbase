@@ -100,6 +100,7 @@ test("keeps the repair-first H1, CTA, and section anchors", () => {
     "#academy",
     "#business",
     "#about",
+    "#faq",
   ]) {
     assert.match(html, new RegExp(`\\bid=["']${anchor.slice(1)}["']`, "i"));
   }
@@ -236,4 +237,24 @@ test("documents new-tab behaviour for external links and WhatsApp drafts", () =>
   assert.match(html, /opens in a new tab/i);
   assert.match(html, /does not store repair form submissions/i);
   assert.match(html, /WhatsApp draft/i);
+});
+
+test("renders FAQ answers and legal page links without inventing prices or warranties", () => {
+  assert.match(html, /id=["']faq["']/);
+  assert.match(html, /Do I get a price before work starts\?/);
+  assert.match(html, /Does this website take payment or store my repair details\?/);
+  assert.doesNotMatch(html, /lifetime warranty|₦|guaranteed same-day/i);
+
+  const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i);
+  assert.ok(footer, "footer should be present");
+  assert.match(footer[0], /href=["']\/faq["']/);
+  assert.match(footer[0], /href=["']\/privacy["']/);
+});
+
+test("sticks a single glass header to the top of the page", () => {
+  assert.match(html, /class="site-header"/);
+  assert.doesNotMatch(html, /class="announcement"/);
+  const headerIndex = html.indexOf('class="site-header"');
+  const mainIndex = html.indexOf('id="main-content"');
+  assert.ok(headerIndex !== -1 && mainIndex !== -1 && headerIndex < mainIndex);
 });
