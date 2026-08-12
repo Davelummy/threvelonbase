@@ -69,8 +69,7 @@ export function HeroSection() {
             width={1200}
             height={900}
             sizes="(max-width: 820px) 100vw, (max-width: 1200px) 55vw, 640px"
-            priority
-            fetchPriority="high"
+            preload
           />
           <div className="visual-chip"><Cpu aria-hidden="true" size={18} /> Precision diagnostics</div>
           <div className="hero-note"><Sparkles aria-hidden="true" size={18} /><span>Hardware + software expertise</span></div>
