@@ -214,4 +214,39 @@ test.describe("Threvelonbase smoke", () => {
     );
     await expect(page.getByText(/does not store repair form submissions/i).first()).toBeVisible();
   });
+
+  test("floating WhatsApp button can be dragged without opening chat", async ({ page }) => {
+    await page.goto("/");
+    const fab = page.locator("a.floating-whatsapp");
+    await expect(fab).toBeVisible();
+    const before = await fab.boundingBox();
+    expect(before).toBeTruthy();
+
+    const popupPromise = page.waitForEvent("popup", { timeout: 1200 }).catch(() => null);
+    await page.mouse.move(before!.x + before!.width / 2, before!.y + before!.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(
+      before!.x + before!.width / 2 - 130,
+      before!.y + before!.height / 2 - 170,
+      { steps: 10 },
+    );
+    await page.mouse.up();
+    expect(await popupPromise).toBeNull();
+
+    const after = await fab.boundingBox();
+    expect(after).toBeTruthy();
+    expect(Math.abs(after!.x - before!.x)).toBeGreaterThan(40);
+    expect(after!.x).toBeGreaterThanOrEqual(0);
+    expect(after!.y).toBeGreaterThanOrEqual(0);
+    expect(after!.x + after!.width).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + 1);
+    expect(after!.y + after!.height).toBeLessThanOrEqual((page.viewportSize()?.height ?? 0) + 1);
+
+    await expect(fab).toHaveClass(/is-moved/);
+    await page.reload();
+    await expect(fab).toHaveClass(/is-moved/);
+    const restored = await fab.boundingBox();
+    expect(restored).toBeTruthy();
+    expect(Math.abs(restored!.x - after!.x)).toBeLessThan(6);
+    expect(Math.abs(restored!.y - after!.y)).toBeLessThan(6);
+  });
 });

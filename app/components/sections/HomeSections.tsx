@@ -434,18 +434,4 @@ export function ContactSection() {
   );
 }
 
-export function FloatingWhatsApp() {
-  return (
-    <a
-      className="floating-whatsapp"
-      target="_blank"
-      rel="noreferrer"
-      aria-label={withNewTabLabel("Chat with Threvelonbase on WhatsApp")}
-      href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry.")}
-    >
-      <span className="floating-whatsapp-glass" aria-hidden="true" />
-      <WhatsAppIcon size={28} className="floating-whatsapp-icon" />
-      <NewTabHint />
-    </a>
-  );
-}
+

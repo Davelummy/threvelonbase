@@ -76,8 +76,10 @@ export default function PrivacyPage() {
           <p>
             If you use the theme control, the site stores <code>tb-theme</code> in
             your browser&apos;s local storage so light or dark mode can persist.
-            That value stays on your device and is not sent to the workshop. You
-            can clear it with the browser.
+            If you drag the WhatsApp button, it stores <code>tb-wa-fab</code> so
+            that position can persist on this device. Those values stay on your
+            device and are not sent to the workshop. You can clear them with the
+            browser.
           </p>
 
           <h2>Hosting</h2>

@@ -1087,6 +1087,10 @@ body {
   height: 58px;
   display: grid;
   place-items: center;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
   color: white;
   border-radius: 50%;
   isolation: isolate;
@@ -1150,6 +1154,19 @@ body {
 .floating-whatsapp:focus-visible {
   outline: 3px solid var(--orange);
   outline-offset: 4px;
+}
+.floating-whatsapp.is-moved {
+  right: auto;
+  bottom: auto;
+}
+.floating-whatsapp.is-dragging {
+  z-index: 50;
+  cursor: grabbing;
+  transition: none;
+  transform: none;
+}
+.floating-whatsapp.is-dragging .floating-whatsapp-icon {
+  transform: none;
 }
 @keyframes wa-pulse-ring {
   0% {
