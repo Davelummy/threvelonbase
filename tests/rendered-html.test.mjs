@@ -1,8 +1,11 @@
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import test, { before } from "node:test";
+import { fileURLToPath } from "node:url";
 
-const developmentPreviewMeta =
-  /<meta(?=[^>]*\bname=["']codex-preview["'])(?=[^>]*\bcontent=["']development["'])[^>]*>/i;
+const root = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
+const homepageHtmlPath = path.join(root, ".next", "server", "app", "index.html");
 
 let html;
 
@@ -48,35 +51,8 @@ function requiredControl(markup, tag, name) {
 }
 
 before(async () => {
-  const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
-
-  const response = await worker.fetch(
-    new Request("http://localhost/", {
-      headers: { accept: "text/html" },
-    }),
-    {
-      ASSETS: {
-        fetch: async () => new Response("Not found", { status: 404 }),
-      },
-    },
-    {
-      waitUntil() {},
-      passThroughOnException() {},
-    },
-  );
-
-  assert.equal(response.status, 200);
-  assert.match(
-    response.headers.get("content-type") ?? "",
-    /^text\/html\b/i,
-  );
-  html = await response.text();
-});
-
-test("does not expose the development preview marker in production HTML", () => {
-  assert.doesNotMatch(html, developmentPreviewMeta);
+  html = await readFile(homepageHtmlPath, "utf8");
+  assert.ok(html.length > 0, `missing Next.js prerendered homepage at ${homepageHtmlPath}; run npm run build first`);
 });
 
 test("renders production metadata and structured local business data", () => {
@@ -231,4 +207,11 @@ test("marks every new-tab external link safe against opener access", () => {
     assert.match(link.href ?? "", /^https:\/\//i);
     assert.match(link.rel ?? "", /(?:^|\s)(?:noopener|noreferrer)(?:\s|$)/i);
   }
+});
+
+test("serves optimized WebP hero and academy assets", () => {
+  assert.match(html, /threvelonbase-repair-hero\.webp/);
+  assert.match(html, /threvelonbase-academy-hands-on\.webp/);
+  assert.doesNotMatch(html, /threvelonbase-repair-hero\.png/);
+  assert.doesNotMatch(html, /threvelonbase-academy-hands-on\.jpg/);
 });

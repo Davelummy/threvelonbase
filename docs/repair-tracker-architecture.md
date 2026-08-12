@@ -12,9 +12,9 @@ site remains a public, anonymous marketing page. Its repair form creates a
 WhatsApp draft for customer review; it does not create a durable tracker record.
 
 Production work must not begin until the operator has approved the retention,
-privacy, staff access, audit, backup, payment and warranty requirements, and the
-required persistence bindings are configured. D1 and R2 remain unconfigured in
-`.openai/hosting.json` until that decision is complete.
+privacy, staff access, audit, backup, payment and warranty requirements, and a
+persistence provider is chosen and configured. The public marketing site does
+not currently include a database or tracker runtime.
 
 ## Core Model
 

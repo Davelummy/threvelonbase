@@ -17,15 +17,8 @@ const originMetadata: Metadata = siteOrigin
     }
   : {};
 
-// Development-only preview marker for local/Sites hosts. Never emit it in production.
-const previewMetadata =
-  process.env.NODE_ENV === "production"
-    ? {}
-    : { other: { "codex-preview": "development" } };
-
 export const metadata: Metadata = {
   ...originMetadata,
-  ...previewMetadata,
   title: homepageTitle,
   description: homepageDescription,
   openGraph: {
