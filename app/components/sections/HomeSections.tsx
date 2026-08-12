@@ -54,7 +54,7 @@ export function HeroSection() {
           <p className="hero-lead gs-hidden" data-gs="hero">Professional hardware and software repairs, quality phones and accessories, and practical technical training in Akure.</p>
           <div className="hero-actions gs-hidden" data-gs="hero">
             <a className="button button-primary" href="#repair-request">Start a repair <ArrowRight aria-hidden="true" size={18} /></a>
-            <a className="button button-secondary" href="#services">Explore our services</a>
+            <a className="hero-secondary-link" href="#services">Explore our services</a>
           </div>
           <div className="trust-row gs-hidden" data-gs="hero">
             <div><span className="trust-icon"><ShieldCheck aria-hidden="true" /></span><p><strong>Since {business.established}</strong><small>Hands-on repair experience</small></p></div>
@@ -89,25 +89,38 @@ export function ServicesSection() {
           <p>Repairs come first. Every other service builds on the same focus: practical expertise, clear guidance and professional care.</p>
         </div>
         <div className="services-grid gs-hidden" data-gs="stagger">
-          {serviceCards.map((service) => {
+          {serviceCards.map((service, index) => {
             const Icon = iconMap[service.icon];
             const external = service.href.startsWith("whatsapp:");
+            const featured = index === 0;
             return (
               <a
-                className="service-card"
+                className={`service-card ${featured ? "service-card-featured" : "service-card-compact"}`}
                 href={enquiryLink(service.href)}
                 key={service.number}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noreferrer" : undefined}
                 aria-label={external ? withNewTabLabel(`${service.action}: ${service.title}`) : undefined}
               >
-                <span className="service-number">{service.number}</span>
-                <span className="service-icon"><Icon aria-hidden="true" /></span>
-                <h3>{service.title}</h3>
-                <p>{service.copy}</p>
-                <span className="card-link">
-                  {service.action} <ChevronRight aria-hidden="true" size={17} />
-                  {external ? <NewTabHint /> : null}
+                {featured ? (
+                  <span className="service-featured-media" aria-hidden="true">
+                    <Image
+                      src="/images/threvelonbase-repair-hero.webp"
+                      alt=""
+                      width={720}
+                      height={540}
+                      sizes="(max-width: 820px) 100vw, 40vw"
+                    />
+                  </span>
+                ) : null}
+                <span className="service-card-body">
+                  <span className="service-icon"><Icon aria-hidden="true" size={featured ? 22 : 18} /></span>
+                  <h3>{service.title}</h3>
+                  <p>{service.copy}</p>
+                  <span className="card-link">
+                    {service.action} <ChevronRight aria-hidden="true" size={17} />
+                    {external ? <NewTabHint /> : null}
+                  </span>
                 </span>
               </a>
             );

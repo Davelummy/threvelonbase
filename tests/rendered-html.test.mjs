@@ -63,6 +63,12 @@ test("renders production metadata and structured local business data", () => {
   assert.match(html, /["']@type["']:["']LocalBusiness["']/i);
 });
 
+test("weights the repair service card and keeps the secondary hero as a text path", () => {
+  assert.match(html, /service-card-featured/);
+  assert.match(html, /hero-secondary-link/);
+  assert.doesNotMatch(html, /class="service-number"/);
+});
+
 test("keeps the repair-first H1, CTA, and section anchors", () => {
   const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
   assert.equal(headings.length, 1);
