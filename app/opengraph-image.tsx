@@ -80,7 +80,7 @@ export default function OpenGraphImage() {
           <span>
             {business.address.shop}, {business.address.locality}
           </span>
-          <span style={{ color: "#FF7A00", fontWeight: 700 }}>Repair-first · WhatsApp-first</span>
+          <span style={{ color: "#FF7A00", fontWeight: 700 }}>Repair · Train · Empower</span>
         </div>
       </div>
     ),

@@ -6,15 +6,21 @@ const baseURL = `http://127.0.0.1:${port}`;
 export default defineConfig({
   testDir: "e2e",
   fullyParallel: false,
-  forbidOnly: Boolean(process.env.CI),
-  retries: process.env.CI ? 1 : 0,
+  forbidOnly: true,
+  retries: 0,
   workers: 1,
-  reporter: process.env.CI ? "github" : "list",
+  // Local-friendly reporters: console list plus HTML under playwright-report/
+  reporter: [
+    ["list"],
+    ["html", { open: "never", outputFolder: "playwright-report" }],
+  ],
   timeout: 60_000,
   use: {
     baseURL,
     trace: "on-first-retry",
+    screenshot: "only-on-failure",
   },
+  outputDir: "test-results",
   webServer: {
     command: `npx --no-install next start -H 127.0.0.1 -p ${port}`,
     url: baseURL,

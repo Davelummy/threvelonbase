@@ -5,7 +5,8 @@
 # forced a different command or publish directory.
 
 [build]
-  command = "npm run build"
+  # Lint, typecheck, production build, and Node contract tests.
+  command = "npm run build:netlify"
   # Publish directory for the Next.js build output. Prefer this file over
   # conflicting UI overrides so Netlify and local docs stay aligned.
   publish = ".next"

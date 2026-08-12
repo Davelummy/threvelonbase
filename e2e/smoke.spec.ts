@@ -13,21 +13,72 @@ async function assertNoHorizontalOverflow(page: Page) {
   expect(canScrollHorizontally).toBe(false);
 }
 
+function primaryNav(page: Page) {
+  return page.locator("#primary-navigation");
+}
+
+function menuButton(page: Page) {
+  return page.getByRole("button", { name: /^(Open|Close) navigation$/i });
+}
+
+async function openMobileMenu(page: Page) {
+  const button = menuButton(page);
+  await expect(button).toBeVisible();
+  await button.click();
+  await expect(button).toHaveAttribute("aria-expanded", "true");
+  await expect(primaryNav(page)).toBeVisible();
+}
+
+async function followPrimaryServicesLink(page: Page) {
+  const services = primaryNav(page).getByRole("link", { name: "Services", exact: true });
+  await expect(services).toBeVisible();
+  await services.click();
+  await expect(page.locator("#services")).toBeInViewport();
+}
+
 test.describe("Threvelonbase smoke", () => {
-  test("homepage navigation, keyboard access and overflow", async ({ page }) => {
+  test("primary navigation, keyboard access and overflow", async ({ page }, testInfo) => {
     await page.goto("/");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       "Expert repairs for phones, laptops & everyday electronics",
     );
 
-    await page.getByRole("link", { name: "Services", exact: true }).first().click();
-    await expect(page.locator("#services")).toBeInViewport();
+    const width = page.viewportSize()?.width ?? 1440;
+    const usesMobileMenu = width <= 820;
+
+    if (usesMobileMenu) {
+      await openMobileMenu(page);
+
+      // Escape closes the menu and returns focus to the control.
+      await page.keyboard.press("Escape");
+      await expect(menuButton(page)).toHaveAttribute("aria-expanded", "false");
+      await expect(menuButton(page)).toBeFocused();
+
+      // Reopen via the primary menu and follow Services (not a footer link).
+      await openMobileMenu(page);
+      await followPrimaryServicesLink(page);
+      await expect(menuButton(page)).toHaveAttribute("aria-expanded", "false");
+    } else {
+      await expect(menuButton(page)).toBeHidden();
+      await expect(primaryNav(page)).toBeVisible();
+      await followPrimaryServicesLink(page);
+    }
+
+    // Sanity: footer Services must not be the only matching control used above.
+    const footerServices = page.locator("footer").getByRole("link", { name: "Services", exact: true });
+    await expect(footerServices).toHaveCount(1);
 
     await page.keyboard.press("Tab");
     const focusedTag = await page.evaluate(() => document.activeElement?.tagName ?? "");
     expect(["A", "BUTTON", "INPUT", "SELECT", "TEXTAREA"]).toContain(focusedTag);
 
     await assertNoHorizontalOverflow(page);
+
+    // Keep project names informative in the HTML report.
+    testInfo.annotations.push({
+      type: "viewport",
+      description: `${width}px primary-nav path: ${usesMobileMenu ? "mobile menu" : "desktop"}`,
+    });
   });
 
   test("theme toggle persists and syncs across tabs", async ({ context, page }) => {
