@@ -25,7 +25,19 @@ Other commands:
 - `npm run start` — serve the production build
 - `npm run lint` — ESLint
 - `npm test` — production build plus contract tests
+- `npm run test:e2e` — Playwright smoke tests (requires a prior `npm run build`)
 - `npm run build:netlify` — alias for the Netlify production build
+
+When `NEXT_PUBLIC_SITE_URL` is set to the public origin (scheme + host only),
+the app emits matching absolute URLs for:
+
+- HTML canonical / `metadataBase`
+- Open Graph `og:url`
+- LocalBusiness JSON-LD `url`
+- `sitemap.xml` homepage entry
+- `robots.txt` sitemap reference
+
+Do not invent a site origin in code when the variable is unset.
 
 ## Netlify deployment
 

@@ -11,7 +11,9 @@
     "build:netlify": "next build",
     "start": "next start",
     "lint": "eslint . --ignore-pattern .next",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs tests/repair-enquiries.test.mjs tests/theme-storage-sync.test.mjs"
+    "test": "npm run build && node --test tests/rendered-html.test.mjs tests/repair-enquiries.test.mjs tests/theme-storage-sync.test.mjs tests/site-seo.test.mjs",
+    "test:e2e": "playwright test",
+    "test:all": "npm test && npm run test:e2e"
   },
   "dependencies": {
     "@fontsource-variable/fraunces": "^5.3.0",
@@ -23,6 +25,7 @@
     "react-dom": "19.2.6"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@tailwindcss/postcss": "4.2.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",

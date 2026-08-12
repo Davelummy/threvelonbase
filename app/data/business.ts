@@ -35,7 +35,7 @@ export type Business = typeof business;
 // The public origin belongs to deployment configuration, not business data.
 // Without an explicit site URL, callers must omit absolute SEO URLs rather
 // than infer one from a preview, request, or hosting project identifier.
-function getSafeSiteOrigin(value: string | undefined) {
+export function getSafeSiteOrigin(value: string | undefined) {
   if (!value) return undefined;
 
   try {
@@ -58,3 +58,9 @@ function getSafeSiteOrigin(value: string | undefined) {
 }
 
 export const siteOrigin = getSafeSiteOrigin(process.env.NEXT_PUBLIC_SITE_URL);
+
+/** Absolute public URLs used by canonical, Open Graph, JSON-LD, sitemap and robots. */
+export function absoluteSiteUrl(path = "/", origin = siteOrigin) {
+  if (!origin) return undefined;
+  return new URL(path, origin).toString();
+}
