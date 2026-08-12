@@ -39,6 +39,29 @@ function applyTheme(theme: Theme) {
   document.documentElement.style.colorScheme = theme;
 }
 
+/**
+ * Resolve a cross-tab `storage` event for the theme key.
+ * Returns the theme to apply, or null when the event should be ignored.
+ * Callers must apply the returned theme to the document before notifying
+ * useSyncExternalStore subscribers so getClientTheme() does not keep a
+ * stale document snapshot.
+ */
+export function resolveStorageThemeUpdate(
+  key: string | null,
+  newValue: string | null,
+  getSystemTheme: () => Theme = systemTheme,
+): Theme | null {
+  if (key !== STORAGE_KEY) {
+    return null;
+  }
+
+  if (newValue === null) {
+    return getSystemTheme();
+  }
+
+  return isTheme(newValue) ? newValue : null;
+}
+
 function subscribe(onStoreChange: () => void) {
   const media = window.matchMedia("(prefers-color-scheme: dark)");
   const onMedia = () => {
@@ -49,12 +72,21 @@ function subscribe(onStoreChange: () => void) {
     }
   };
 
-  window.addEventListener("storage", onStoreChange);
+  const onStorage = (event: StorageEvent) => {
+    const next = resolveStorageThemeUpdate(event.key, event.newValue);
+    if (!next) {
+      return;
+    }
+    applyTheme(next);
+    onStoreChange();
+  };
+
+  window.addEventListener("storage", onStorage);
   window.addEventListener(THEME_EVENT, onStoreChange);
   media.addEventListener("change", onMedia);
 
   return () => {
-    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener("storage", onStorage);
     window.removeEventListener(THEME_EVENT, onStoreChange);
     media.removeEventListener("change", onMedia);
   };
