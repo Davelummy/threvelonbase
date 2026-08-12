@@ -63,6 +63,21 @@ test("renders production metadata and structured local business data", () => {
   assert.match(html, /["']@type["']:["']LocalBusiness["']/i);
 });
 
+test("weights the repair service card and keeps the secondary hero as a text path", () => {
+  assert.match(html, /service-card-featured/);
+  assert.match(html, /hero-secondary-link/);
+  assert.doesNotMatch(html, /class="service-number"/);
+});
+
+test("prints the motto once in the footer brand, not under the wordmark", () => {
+  const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i);
+  assert.ok(footer, "footer should be present");
+  const motto = footer[0].match(/Technology Evolution and Revolution/gi) ?? [];
+  assert.equal(motto.length, 1);
+  assert.match(footer[0], /footer-tagline/);
+  assert.match(footer[0], /wordmark-compact/);
+});
+
 test("keeps the repair-first H1, CTA, and section anchors", () => {
   const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
   assert.equal(headings.length, 1);
@@ -85,6 +100,7 @@ test("keeps the repair-first H1, CTA, and section anchors", () => {
     "#academy",
     "#business",
     "#about",
+    "#faq",
   ]) {
     assert.match(html, new RegExp(`\\bid=["']${anchor.slice(1)}["']`, "i"));
   }
@@ -209,8 +225,9 @@ test("marks every new-tab external link safe against opener access", () => {
   }
 });
 
-test("serves optimized WebP hero and academy assets", () => {
+test("serves distinct WebP hero, featured repair, and academy assets", () => {
   assert.match(html, /threvelonbase-repair-hero\.webp/);
+  assert.match(html, /threvelonbase-repair-featured\.webp/);
   assert.match(html, /threvelonbase-academy-hands-on\.webp/);
   assert.doesNotMatch(html, /threvelonbase-repair-hero\.png/);
   assert.doesNotMatch(html, /threvelonbase-academy-hands-on\.jpg/);
@@ -220,4 +237,28 @@ test("documents new-tab behaviour for external links and WhatsApp drafts", () =>
   assert.match(html, /opens in a new tab/i);
   assert.match(html, /does not store repair form submissions/i);
   assert.match(html, /WhatsApp draft/i);
+});
+
+test("renders FAQ answers and legal page links without inventing prices or warranties", () => {
+  assert.match(html, /id=["']faq["']/);
+  assert.match(html, /Do I get a price before work starts\?/);
+  assert.match(html, /Does this website take payment or store my repair details\?/);
+  assert.doesNotMatch(html, /lifetime warranty|₦|guaranteed same-day/i);
+
+  const main = html.match(/<main\b[\s\S]*?<\/main>/i);
+  const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i);
+  assert.ok(main, "landing page main should be present");
+  assert.ok(footer, "footer should be present");
+  assert.match(main[0], /href=["']\/faq["']/);
+  assert.match(main[0], /href=["']\/privacy["']/);
+  assert.match(footer[0], /href=["']\/faq["']/);
+  assert.match(footer[0], /href=["']\/privacy["']/);
+});
+
+test("sticks a single glass header to the top of the page", () => {
+  assert.match(html, /class="site-header"/);
+  assert.doesNotMatch(html, /class="announcement"/);
+  const headerIndex = html.indexOf('class="site-header"');
+  const mainIndex = html.indexOf('id="main-content"');
+  assert.ok(headerIndex !== -1 && mainIndex !== -1 && headerIndex < mainIndex);
 });

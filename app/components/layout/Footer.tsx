@@ -1,6 +1,7 @@
 import { AtSign, Clock3, Mail, MapPin, Phone } from "lucide-react";
+import Link from "next/link";
 import { business } from "../../data/business";
-import { navItems } from "../../data/content";
+import { navItems, rootedSectionHref } from "../../data/content";
 import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
 import { Wordmark } from "../brand/Wordmark";
 
@@ -19,9 +20,9 @@ export function Footer() {
       <div className="shell footer-shell">
         <div className="footer-top">
           <div className="footer-brand">
-            <a className="footer-wordmark" href="#top" aria-label="Threvelonbase home">
-              <Wordmark reversed />
-            </a>
+            <Link className="footer-wordmark" href="/#top" aria-label="Threvelonbase home">
+              <Wordmark reversed compact />
+            </Link>
             <p className="footer-tagline">{business.tagline}</p>
             <p className="footer-blurb">
               Electronics repairs, devices and practical technical training from Shop 12A,
@@ -42,11 +43,13 @@ export function Footer() {
             <strong className="footer-heading">Explore</strong>
             <nav className="footer-links" aria-label="Footer navigation">
               {navItems.map(([label, href]) => (
-                <a href={href} key={href}>
+                <Link href={rootedSectionHref(href)} key={href}>
                   {label}
-                </a>
+                </Link>
               ))}
-              <a href="#repair-request">Start a repair</a>
+              <Link href="/#repair-request">Start a repair</Link>
+              <Link href="/faq">FAQ</Link>
+              <Link href="/privacy">Privacy</Link>
             </nav>
           </div>
 
@@ -127,7 +130,10 @@ export function Footer() {
           <div className="footer-legal">
             <span>© {new Date().getFullYear()} Threvelonbase</span>
             <p className="footer-privacy">
-              Enquiries open as WhatsApp drafts on your device. This website does not keep a customer account or store repair form submissions.
+              Enquiries open as WhatsApp drafts on your device. This website does not keep a customer account or store repair form submissions.{" "}
+              <Link href="/privacy">Privacy</Link>
+              {" · "}
+              <Link href="/faq">FAQ</Link>
             </p>
           </div>
           <span className="footer-values">

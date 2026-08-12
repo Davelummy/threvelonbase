@@ -1,27 +1,16 @@
 "use client";
 
 import { Menu, Phone, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { business } from "../../data/business";
-import { navItems } from "../../data/content";
+import { homeSectionHref, navItems } from "../../data/content";
 import { Wordmark } from "../brand/Wordmark";
 import { ThemeToggle } from "../theme/ThemeToggle";
 
-export function AnnouncementBar() {
-  return (
-    <>
-      <a className="skip-link" href="#main-content">Skip to content</a>
-      <div className="announcement">
-        <div className="shell announcement-inner">
-          <span><i /> Repair workshop open Monday-Saturday, 8:00 AM-6:00 PM</span>
-          <a href={business.phones[0].href}><Phone aria-hidden="true" size={14} /> {business.phones[0].display}</a>
-        </div>
-      </div>
-    </>
-  );
-}
-
 export function SiteHeader() {
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobileNav, setIsMobileNav] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
@@ -63,12 +52,31 @@ export function SiteHeader() {
     setMenuOpen(false);
   }
 
+  const atHome = pathname === "/";
+
   return (
     <header className="site-header">
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <div className="header-utility">
+        <div className="shell header-utility-inner">
+          <span>
+            <i /> Repair workshop open Monday-Saturday, 8:00 AM-6:00 PM
+          </span>
+          <a href={business.phones[0].href}>
+            <Phone aria-hidden="true" size={14} /> {business.phones[0].display}
+          </a>
+        </div>
+      </div>
       <div className="shell header-inner">
-        <a className="wordmark-link" href="#top" aria-label="Threvelonbase home">
+        <Link
+          className="wordmark-link"
+          href={atHome ? "/#top" : "/"}
+          aria-label="Threvelonbase home"
+        >
           <Wordmark compact />
-        </a>
+        </Link>
 
         <nav
           ref={navRef}
@@ -78,14 +86,28 @@ export function SiteHeader() {
           aria-hidden={isMobileNav ? !menuOpen : undefined}
         >
           {navItems.map(([label, href]) => (
-            <a key={href} href={href} onClick={closeMenu}>{label}</a>
+            <a key={href} href={homeSectionHref(href, pathname)} onClick={closeMenu}>
+              {label}
+            </a>
           ))}
-          <a className="nav-cta" href="#repair-request" onClick={closeMenu}>Start a repair</a>
-          <ThemeToggle className="theme-toggle-nav" />
+          <a
+            className="nav-cta nav-cta-menu"
+            href={homeSectionHref("#repair-request", pathname)}
+            onClick={closeMenu}
+          >
+            Start a repair
+          </a>
         </nav>
 
         <div className="header-actions">
-          <ThemeToggle className="theme-toggle-bar" />
+          <a
+            className="nav-cta nav-cta-bar"
+            href={homeSectionHref("#repair-request", pathname)}
+            onClick={closeMenu}
+          >
+            Start a repair
+          </a>
+          <ThemeToggle />
           <button
             ref={menuButtonRef}
             className="menu-button"

@@ -177,4 +177,41 @@ test.describe("Threvelonbase smoke", () => {
       expect(messages.some((message) => message.includes(fragment))).toBeTruthy();
     }
   });
+
+  test("glass header sits at the top and legal pages render", async ({ page }) => {
+    await page.goto("/");
+    const header = page.locator("header.site-header");
+    await expect(header).toBeVisible();
+    const homeBox = await header.boundingBox();
+    expect(homeBox?.y ?? -1).toBe(0);
+    await expect(page.locator(".announcement")).toHaveCount(0);
+
+    const width = page.viewportSize()?.width ?? 1440;
+    if (width > 820) {
+      const inner = await page.locator(".header-inner").boundingBox();
+      const cta = await page.locator(".header-actions .nav-cta").boundingBox();
+      const toggle = await page.locator(".header-actions .theme-toggle").boundingBox();
+      expect(inner && cta && toggle).toBeTruthy();
+      expect(cta!.x).toBeGreaterThan(inner!.x + inner!.width * 0.55);
+      expect(toggle!.x).toBeGreaterThan(cta!.x);
+    }
+
+    await expect(page.locator("#faq").getByRole("link", { name: "FAQ page" })).toBeVisible();
+    await expect(page.locator("#faq").getByRole("link", { name: "Privacy" })).toBeVisible();
+
+    await page.goto("/faq");
+    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "Clear answers before you bring the device.",
+    );
+    await expect(page.getByText("What devices do you repair?")).toBeVisible();
+    const faqHeader = await page.locator("header.site-header").boundingBox();
+    expect(faqHeader?.y ?? -1).toBe(0);
+
+    await page.goto("/privacy");
+    await expect(page.getByRole("heading", { level: 1 })).toContainText(
+      "How this website handles your information.",
+    );
+    await expect(page.getByText(/does not store repair form submissions/i).first()).toBeVisible();
+  });
 });

@@ -39,7 +39,7 @@ the app emits matching absolute URLs for:
 - HTML canonical / `metadataBase`
 - Open Graph `og:url`
 - LocalBusiness JSON-LD `url`
-- `sitemap.xml` homepage entry
+- `sitemap.xml` entries for `/`, `/faq` and `/privacy`
 - `robots.txt` sitemap reference
 
 Do not invent a site origin in code when the variable is unset.

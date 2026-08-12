@@ -1,3 +1,7 @@
+export const homepageTitle = "Threvelonbase | Electronics Repairs, Devices & Training in Akure";
+export const homepageDescription =
+  "Electronics repairs for phones, laptops and everyday devices in Akure, plus phones, accessories, repair training and business services.";
+
 export const navItems = [
   ["Services", "#services"],
   ["Repairs", "#repairs"],
@@ -5,6 +9,15 @@ export const navItems = [
   ["Business solutions", "#business"],
   ["About", "#about"],
 ] as const;
+
+/** Hash links that still work from /faq and /privacy. */
+export function homeSectionHref(hash: `#${string}`, pathname = "/") {
+  return pathname === "/" ? hash : `/${hash}`;
+}
+
+export function rootedSectionHref(hash: `#${string}`) {
+  return `/${hash}`;
+}
 
 export const repairTypes = [
   "Screen and touch repairs",
