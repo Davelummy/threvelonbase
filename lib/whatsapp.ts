@@ -89,7 +89,7 @@ export function consultancyMessage() {
 
 export function enquiryMessage(category: Exclude<EnquiryCategory, "repair">) {
   const messages = {
-    phones: "Hello Threvelonbase, I want to ask about the new and used phones currently available. My preferred model or use case is: [add details]. My preferred contact method is: [add method].",
+    phones: newPhoneMessage(),
     usedPhones: usedPhoneMessage(),
     accessories: accessoriesMessage(),
     training: trainingMessage(),
@@ -99,6 +99,10 @@ export function enquiryMessage(category: Exclude<EnquiryCategory, "repair">) {
   } satisfies Record<Exclude<EnquiryCategory, "repair">, string>;
 
   return messages[category];
+}
+
+export function enquiryWhatsappHref(category: Exclude<EnquiryCategory, "repair">) {
+  return whatsappHref(enquiryMessage(category));
 }
 
 export function repairMessage(enquiry: RepairEnquiry) {

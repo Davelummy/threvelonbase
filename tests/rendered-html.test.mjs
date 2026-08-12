@@ -164,14 +164,31 @@ test("renders WhatsApp links with the approved number and enquiry messages", () 
 
   const messages = links.map((link) => new URL(link.href).searchParams.get("text") ?? "");
   for (const fragment of [
-    "new and used phones currently available",
+    "new phone",
+    "used phone",
     "ask about an accessory",
     "repair training or apprenticeship",
     "repair-business setup",
+    "institutional training",
+    "business consultancy",
   ]) {
     assert.ok(
       messages.some((message) => message.toLowerCase().includes(fragment.toLowerCase())),
       `missing WhatsApp enquiry path for ${fragment}`,
+    );
+  }
+
+  const labels = links.map((link) => link.text.toLowerCase());
+  for (const label of [
+    "ask about a new phone",
+    "ask about a used phone",
+    "discuss repair-business setup",
+    "discuss institutional training",
+    "discuss business consultancy",
+  ]) {
+    assert.ok(
+      labels.some((text) => text.includes(label)),
+      `missing accessible customer path label: ${label}`,
     );
   }
 });

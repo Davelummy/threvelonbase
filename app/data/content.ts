@@ -53,8 +53,8 @@ export const serviceCards = [
     title: "New & used phones",
     copy: "Ask about currently available devices and get direct guidance before you buy.",
     icon: "smartphone",
-    href: "whatsapp:phones",
-    action: "Ask about available phones",
+    href: "#devices",
+    action: "Choose new or used",
   },
   {
     number: "03",
