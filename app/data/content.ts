@@ -92,7 +92,7 @@ export type EnquiryCategory =
   | "institutionalTraining"
   | "consultancy";
 
-/** Verified trust signals for the CTMDS-style marquee (no invented claims). */
+/** Verified trust signals for the homepage marquee (no invented claims). */
 export const trustMarqueeItems = [
   {
     id: "established",
