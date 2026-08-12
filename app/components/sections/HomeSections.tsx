@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   ArrowRight,
   BadgeCheck,
@@ -22,8 +23,9 @@ import {
   Zap,
 } from "lucide-react";
 import { business } from "../../data/business";
+import type { EnquiryCategory } from "../../data/content";
 import { repairTypes, serviceCards } from "../../data/content";
-import { enquiryMessage, whatsappHref } from "../../../lib/whatsapp";
+import { enquiryWhatsappHref, whatsappHref } from "../../../lib/whatsapp";
 import { WhatsAppIcon } from "../brand/WhatsAppIcon";
 import { RepairForm } from "../forms/RepairForm";
 
@@ -37,8 +39,8 @@ const iconMap = {
 
 function enquiryLink(href: string) {
   if (!href.startsWith("whatsapp:")) return href;
-  const category = href.replace("whatsapp:", "") as "phones" | "accessories";
-  return whatsappHref(enquiryMessage(category));
+  const category = href.replace("whatsapp:", "") as Exclude<EnquiryCategory, "repair">;
+  return enquiryWhatsappHref(category);
 }
 
 export function HeroSection() {
@@ -60,7 +62,15 @@ export function HeroSection() {
         </div>
         <div className="hero-visual gs-hidden" data-gs="hero">
           <div className="diagnostic-line" aria-hidden="true" />
-          <img src="/images/threvelonbase-repair-hero.png" alt="An electronics technician carrying out a precision smartphone repair" width="1448" height="1086" fetchPriority="high" />
+          <Image
+            className="hero-photo"
+            src="/images/threvelonbase-repair-hero.webp"
+            alt="An electronics technician carrying out a precision smartphone repair"
+            width={1200}
+            height={900}
+            sizes="(max-width: 820px) 100vw, (max-width: 1200px) 55vw, 640px"
+            preload
+          />
           <div className="visual-chip"><Cpu aria-hidden="true" size={18} /> Precision diagnostics</div>
           <div className="hero-note"><Sparkles aria-hidden="true" size={18} /><span>Hardware + software expertise</span></div>
         </div>
@@ -152,17 +162,48 @@ export function RepairRequestSection() {
 
 export function CommerceSection() {
   return (
-    <section className="commerce section">
+    <section className="commerce section" id="devices">
       <div className="shell commerce-grid gs-hidden" data-gs="stagger">
         <article className="commerce-feature devices-card">
-          <div className="commerce-icon"><MonitorSmartphone aria-hidden="true" /></div><p className="eyebrow"><span /> Devices</p><h2>Looking for a new or used phone?</h2>
-          <p>Ask what is currently available and speak directly with the team before making a purchase decision.</p>
-          <a className="button button-dark" target="_blank" rel="noreferrer" href={whatsappHref(enquiryMessage("phones"))}>Check available phones <ArrowRight aria-hidden="true" size={18} /></a>
+          <div className="commerce-icon"><MonitorSmartphone aria-hidden="true" /></div>
+          <p className="eyebrow"><span /> Devices</p>
+          <h2>Looking for a new or used phone?</h2>
+          <p>Ask what is currently available and speak directly with the team before making a purchase decision. Choose the path that matches what you want so the workshop knows whether to discuss a new or used device.</p>
+          <div className="commerce-actions">
+            <a
+              className="button button-dark"
+              target="_blank"
+              rel="noreferrer"
+              href={enquiryWhatsappHref("phones")}
+              aria-label="Ask about a new phone on WhatsApp"
+            >
+              Ask about a new phone <ArrowRight aria-hidden="true" size={18} />
+            </a>
+            <a
+              className="button button-secondary"
+              target="_blank"
+              rel="noreferrer"
+              href={enquiryWhatsappHref("usedPhones")}
+              aria-label="Ask about a used phone on WhatsApp"
+            >
+              Ask about a used phone <ArrowRight aria-hidden="true" size={18} />
+            </a>
+          </div>
         </article>
         <article className="commerce-feature accessories-card">
-          <div className="commerce-icon"><ShoppingBag aria-hidden="true" /></div><p className="eyebrow"><span /> Accessories</p><h2>Everyday essentials for your devices.</h2>
+          <div className="commerce-icon"><ShoppingBag aria-hidden="true" /></div>
+          <p className="eyebrow"><span /> Accessories</p>
+          <h2>Everyday essentials for your devices.</h2>
           <p>Ask about chargers, cables, batteries, cases, screen protection, audio accessories and laptop add-ons.</p>
-          <a className="button button-secondary" target="_blank" rel="noreferrer" href={whatsappHref(enquiryMessage("accessories"))}>Ask about an accessory <ArrowRight aria-hidden="true" size={18} /></a>
+          <a
+            className="button button-secondary"
+            target="_blank"
+            rel="noreferrer"
+            href={enquiryWhatsappHref("accessories")}
+            aria-label="Ask about an accessory on WhatsApp"
+          >
+            Ask about an accessory <ArrowRight aria-hidden="true" size={18} />
+          </a>
         </article>
       </div>
     </section>
@@ -174,12 +215,13 @@ export function AcademySection() {
     <section className="academy section" id="academy">
       <div className="shell academy-grid">
         <div className="academy-art gs-hidden" data-gs="scale">
-          <img
+          <Image
             className="academy-photo"
-            src="/images/threvelonbase-academy-hands-on.jpg"
+            src="/images/threvelonbase-academy-hands-on.webp"
             alt="A mentor guiding a trainee through hands-on smartphone board repair at the workshop bench"
-            width="864"
-            height="1152"
+            width={900}
+            height={1200}
+            sizes="(max-width: 820px) 100vw, 45vw"
             loading="lazy"
           />
           <span className="academy-kicker">PRACTICAL LEARNING</span>
@@ -192,7 +234,15 @@ export function AcademySection() {
           <p className="eyebrow light"><span /> Threvelonbase Academy</p><h2>Learn the repair skill—and the discipline behind it.</h2>
           <p>The training programme combines supervised mobile-phone repair practice with customer service, business ethics, punctuality and professional conduct.</p>
           <div className="academy-points"><span><Check aria-hidden="true" /> Hardware and software diagnosis</span><span><Check aria-hidden="true" /> Android and iOS troubleshooting</span><span><Check aria-hidden="true" /> Real workshop experience</span><span><Check aria-hidden="true" /> Mentorship and business ethics</span></div>
-          <a className="button button-primary" target="_blank" rel="noreferrer" href={whatsappHref(enquiryMessage("training"))}>Ask about the academy <ArrowRight aria-hidden="true" size={18} /></a>
+          <a
+            className="button button-primary"
+            target="_blank"
+            rel="noreferrer"
+            href={enquiryWhatsappHref("training")}
+            aria-label="Ask about training or apprenticeship on WhatsApp"
+          >
+            Ask about the academy <ArrowRight aria-hidden="true" size={18} />
+          </a>
         </div>
       </div>
     </section>
@@ -203,14 +253,66 @@ export function BusinessSection() {
   return (
     <section className="business section" id="business">
       <div className="shell">
-        <div className="section-heading split-heading gs-hidden" data-gs="fade-up"><div><p className="eyebrow"><span /> Business & institutional</p><h2>Practical support beyond the workshop.</h2></div><p>Project-based services for entrepreneurs, organisations and training programmes, shown according to their current stage.</p></div>
-        <div className="business-grid gs-hidden" data-gs="stagger">
-          <article><span className="status active">Active</span><Wrench aria-hidden="true" /><h3>Repair-business setup</h3><p>Project-based setup and guidance for entrepreneurs building a repair operation.</p></article>
-          <article><span className="status active">Active & developing</span><BookOpen aria-hidden="true" /><h3>Institutional training</h3><p>On-site skills training and mentorship for organised programmes and groups.</p></article>
-          <article><span className="status emerging">Emerging</span><BriefcaseBusiness aria-hidden="true" /><h3>Business consultancy</h3><p>Practical guidance currently provided informally and being structured as a formal service.</p></article>
-          <article><span className="status planned">Planned</span><Zap aria-hidden="true" /><h3>Equipment importation</h3><p>A future line focused on improving access to repair tools and equipment.</p></article>
+        <div className="section-heading split-heading gs-hidden" data-gs="fade-up">
+          <div>
+            <p className="eyebrow"><span /> Business & institutional</p>
+            <h2>Practical support beyond the workshop.</h2>
+          </div>
+          <p>Project-based services for entrepreneurs, organisations and training programmes, shown according to their current stage. Choose the enquiry that matches your project so the team receives the right context.</p>
         </div>
-        <div className="business-cta gs-hidden" data-gs="fade-up"><p>Planning a repair business, institutional training programme, or consultancy project?</p><a target="_blank" rel="noreferrer" href={whatsappHref(enquiryMessage("repairBusinessSetup"))}>Discuss your project <ArrowRight aria-hidden="true" size={17} /></a></div>
+        <div className="business-grid gs-hidden" data-gs="stagger">
+          <article>
+            <span className="status active">Active</span>
+            <Wrench aria-hidden="true" />
+            <h3>Repair-business setup</h3>
+            <p>Project-based setup and guidance for entrepreneurs building a repair operation.</p>
+            <a
+              className="text-link business-enquiry"
+              target="_blank"
+              rel="noreferrer"
+              href={enquiryWhatsappHref("repairBusinessSetup")}
+              aria-label="Discuss repair-business setup on WhatsApp"
+            >
+              Discuss repair-business setup <ArrowRight aria-hidden="true" size={16} />
+            </a>
+          </article>
+          <article>
+            <span className="status active">Active & developing</span>
+            <BookOpen aria-hidden="true" />
+            <h3>Institutional training</h3>
+            <p>On-site skills training and mentorship for organised programmes and groups.</p>
+            <a
+              className="text-link business-enquiry"
+              target="_blank"
+              rel="noreferrer"
+              href={enquiryWhatsappHref("institutionalTraining")}
+              aria-label="Discuss institutional training on WhatsApp"
+            >
+              Discuss institutional training <ArrowRight aria-hidden="true" size={16} />
+            </a>
+          </article>
+          <article>
+            <span className="status emerging">Emerging</span>
+            <BriefcaseBusiness aria-hidden="true" />
+            <h3>Business consultancy</h3>
+            <p>Practical guidance currently provided informally and being structured as a formal service.</p>
+            <a
+              className="text-link business-enquiry"
+              target="_blank"
+              rel="noreferrer"
+              href={enquiryWhatsappHref("consultancy")}
+              aria-label="Discuss business consultancy on WhatsApp"
+            >
+              Discuss business consultancy <ArrowRight aria-hidden="true" size={16} />
+            </a>
+          </article>
+          <article>
+            <span className="status planned">Planned</span>
+            <Zap aria-hidden="true" />
+            <h3>Equipment importation</h3>
+            <p>A future line focused on improving access to repair tools and equipment. Not open for booking yet.</p>
+          </article>
+        </div>
       </div>
     </section>
   );

@@ -22,7 +22,7 @@ async function loadWhatsapp() {
     .replace(/: Exclude<EnquiryCategory, "repair">/g, "")
     .replace(/\s+satisfies Record<[^;]+>/, "")
     .replace(/export function/g, "function")
-    .concat(`\nreturn { whatsappHref, validateRepairForm, newPhoneMessage, usedPhoneMessage, accessoriesMessage, trainingMessage, repairBusinessSetupMessage, institutionalTrainingMessage, consultancyMessage, enquiryMessage, repairMessage, repairWhatsappHref };`);
+    .concat(`\nreturn { whatsappHref, validateRepairForm, newPhoneMessage, usedPhoneMessage, accessoriesMessage, trainingMessage, repairBusinessSetupMessage, institutionalTrainingMessage, consultancyMessage, enquiryMessage, enquiryWhatsappHref, repairMessage, repairWhatsappHref };`);
 
   return new Function(javascript)();
 }
@@ -47,11 +47,20 @@ test("builds an encoded repair WhatsApp URL with all collected details", async (
 });
 
 test("keeps enquiry messages differentiated by category", async () => {
-  const { enquiryMessage, newPhoneMessage, usedPhoneMessage, accessoriesMessage, trainingMessage, repairBusinessSetupMessage, institutionalTrainingMessage, consultancyMessage } = await loadWhatsapp();
+  const {
+    enquiryMessage,
+    enquiryWhatsappHref,
+    newPhoneMessage,
+    usedPhoneMessage,
+    accessoriesMessage,
+    trainingMessage,
+    repairBusinessSetupMessage,
+    institutionalTrainingMessage,
+    consultancyMessage,
+  } = await loadWhatsapp();
   const messages = [
     enquiryMessage("phones"),
-    newPhoneMessage(),
-    usedPhoneMessage(),
+    enquiryMessage("usedPhones"),
     accessoriesMessage(),
     trainingMessage(),
     repairBusinessSetupMessage(),
@@ -60,9 +69,31 @@ test("keeps enquiry messages differentiated by category", async () => {
   ];
 
   assert.equal(new Set(messages).size, messages.length);
+  assert.equal(enquiryMessage("phones"), newPhoneMessage());
+  assert.equal(enquiryMessage("usedPhones"), usedPhoneMessage());
+  assert.match(enquiryMessage("phones"), /new phone/i);
   assert.match(enquiryMessage("usedPhones"), /used phone/i);
+  assert.doesNotMatch(enquiryMessage("phones"), /used phone/i);
+  assert.doesNotMatch(enquiryMessage("usedPhones"), /new phone/i);
   assert.match(enquiryMessage("institutionalTraining"), /institutional training/i);
   assert.match(enquiryMessage("consultancy"), /consultancy/i);
+  assert.match(enquiryMessage("repairBusinessSetup"), /repair-business setup/i);
+
+  const newPhoneHref = enquiryWhatsappHref("phones");
+  const usedPhoneHref = enquiryWhatsappHref("usedPhones");
+  const setupHref = enquiryWhatsappHref("repairBusinessSetup");
+  const institutionalHref = enquiryWhatsappHref("institutionalTraining");
+  const consultancyHref = enquiryWhatsappHref("consultancy");
+
+  assert.match(newPhoneHref, /^https:\/\/wa\.me\/2348037722368\?text=/);
+  assert.equal(decodeURIComponent(newPhoneHref.split("?text=")[1]), newPhoneMessage());
+  assert.equal(decodeURIComponent(usedPhoneHref.split("?text=")[1]), usedPhoneMessage());
+  assert.equal(decodeURIComponent(setupHref.split("?text=")[1]), repairBusinessSetupMessage());
+  assert.equal(decodeURIComponent(institutionalHref.split("?text=")[1]), institutionalTrainingMessage());
+  assert.equal(decodeURIComponent(consultancyHref.split("?text=")[1]), consultancyMessage());
+  assert.notEqual(newPhoneHref, usedPhoneHref);
+  assert.notEqual(setupHref, institutionalHref);
+  assert.notEqual(institutionalHref, consultancyHref);
 });
 
 test("returns readable, bounded validation errors without changing entered values", async () => {

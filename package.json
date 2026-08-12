@@ -13,7 +13,7 @@
     "build:netlify": "BUILD_TARGET=netlify bash scripts/build.sh",
     "start": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "start:next": "next start",
-    "test": "npm run build:sites && node --test tests/rendered-html.test.mjs tests/repair-enquiries.test.mjs",
+    "test": "npm run build:sites && node --test tests/rendered-html.test.mjs tests/repair-enquiries.test.mjs tests/theme-storage-sync.test.mjs",
     "validate:artifact": "bash scripts/validate-artifact.sh",
     "lint": "bash scripts/sites-env.sh -- eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "bash scripts/sites-env.sh -- drizzle-kit generate"
