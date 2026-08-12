@@ -6,8 +6,8 @@
 
 [build]
   command = "npm run build"
-  # Leave publish empty for the OpenNext Next.js plugin. Do not set
-  # publish = ".next" in the Netlify UI — the plugin owns the publish dir.
+  # Publish directory for the Next.js build output. Prefer this file over
+  # conflicting UI overrides so Netlify and local docs stay aligned.
   publish = ".next"
 
 [build.environment]
