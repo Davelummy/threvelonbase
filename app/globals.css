@@ -1208,8 +1208,12 @@ body {
   .hero-grid, .split-heading, .repair-grid, .request-grid, .academy-grid, .values-grid, .contact-grid { grid-template-columns: 1fr; }
   .hero-copy { order: 2; }
   .hero-visual { order: 1; max-width: none; }
+  /* 16/10 at tablet so photo-first still leaves the H1 and primary CTA on a 768×1024 fold. */
   .hero-visual img,
-  .hero-visual .hero-photo { aspect-ratio: 4 / 5; }
+  .hero-visual .hero-photo {
+    aspect-ratio: 16 / 10;
+    object-position: 58% 40%;
+  }
   .hero-visual::after { border-radius: 24px; }
   .visual-chip,
   .hero-note,
@@ -1274,7 +1278,7 @@ body {
   .trust-row { grid-template-columns: 1fr; gap: 17px; margin-top: 28px; }
   .trust-row > div + div { padding: 17px 0 0; border-left: 0; border-top: 1px solid var(--sand); }
   .hero-visual img,
-  .hero-visual .hero-photo { aspect-ratio: 4 / 5; border-radius: 20px; }
+  .hero-visual .hero-photo { aspect-ratio: 4 / 5; object-position: 58% 22%; border-radius: 20px; }
   .hero-visual::after { border-radius: 20px; }
   .section { padding: 72px 0; }
   .request-section { padding-bottom: calc(72px + 88px); }

@@ -78,6 +78,11 @@ test("prints the motto once in the footer brand, not under the wordmark", () => 
   assert.match(footer[0], /wordmark-compact/);
 });
 
+test("does not invent a timed repair promise", () => {
+  assert.doesNotMatch(html, /five-minute fix/i);
+  assert.match(html, /From routine component repairs to complex board work\./);
+});
+
 test("keeps the repair-first H1, CTA, and section anchors", () => {
   const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
   assert.equal(headings.length, 1);

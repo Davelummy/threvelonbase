@@ -36,6 +36,18 @@ async function followPrimaryServicesLink(page: Page) {
   await expect(page.locator("#services")).toBeInViewport();
 }
 
+function boxesOverlap(
+  a: { x: number; y: number; width: number; height: number },
+  b: { x: number; y: number; width: number; height: number },
+) {
+  return !(
+    a.x + a.width <= b.x ||
+    b.x + b.width <= a.x ||
+    a.y + a.height <= b.y ||
+    b.y + b.height <= a.y
+  );
+}
+
 test.describe("Threvelonbase smoke", () => {
   test("primary navigation, keyboard access and overflow", async ({ page }, testInfo) => {
     await page.goto("/");
@@ -213,5 +225,35 @@ test.describe("Threvelonbase smoke", () => {
       "How this website handles your information.",
     );
     await expect(page.getByText(/does not store repair form submissions/i).first()).toBeVisible();
+  });
+
+  test("tablet first fold keeps the repair CTA visible and the FAB misses the form", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const width = page.viewportSize()?.width ?? 1440;
+    const height = page.viewportSize()?.height ?? 900;
+
+    if (width > 560 && width <= 820) {
+      const h1 = await page.getByRole("heading", { level: 1 }).boundingBox();
+      const cta = await page.locator(".hero-actions .button-primary").boundingBox();
+      expect(h1).toBeTruthy();
+      expect(cta).toBeTruthy();
+      expect(h1!.y + h1!.height).toBeLessThanOrEqual(height);
+      expect(cta!.y + cta!.height).toBeLessThanOrEqual(height);
+    }
+
+    if (width <= 820) {
+      await page.goto("/#repair-request");
+      const submit = page.locator("form.repair-form").getByRole("button", { name: /Continue on WhatsApp/i });
+      await expect(submit).toBeVisible();
+      await submit.scrollIntoViewIfNeeded();
+      const fab = page.locator("a.floating-whatsapp");
+      await expect(fab).toBeVisible();
+      const submitBox = await submit.boundingBox();
+      const fabBox = await fab.boundingBox();
+      expect(submitBox && fabBox).toBeTruthy();
+      expect(boxesOverlap(submitBox!, fabBox!)).toBe(false);
+    }
   });
 });
