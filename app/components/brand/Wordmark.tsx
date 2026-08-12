@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type WordmarkProps = {
   reversed?: boolean;
   /** Hide the tagline under the name (cleaner for headers). */
@@ -17,31 +19,34 @@ export function Wordmark({
       data-compact={compact ? "true" : "false"}
     >
       {reversed ? (
-        <img
+        <Image
           className="wordmark-mark"
           src="/brand/tb-mark-reversed.svg"
-          width="40"
-          height="40"
+          width={40}
+          height={40}
           alt=""
           aria-hidden="true"
+          unoptimized
         />
       ) : (
         <>
-          <img
+          <Image
             className="wordmark-mark wordmark-mark-light"
             src="/brand/tb-mark.svg"
-            width="40"
-            height="40"
+            width={40}
+            height={40}
             alt=""
             aria-hidden="true"
+            unoptimized
           />
-          <img
+          <Image
             className="wordmark-mark wordmark-mark-dark"
             src="/brand/tb-mark-reversed.svg"
-            width="40"
-            height="40"
+            width={40}
+            height={40}
             alt=""
             aria-hidden="true"
+            unoptimized
           />
         </>
       )}

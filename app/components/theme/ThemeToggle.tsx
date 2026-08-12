@@ -1,17 +1,37 @@
 "use client";
 
 import { Moon, Sun } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 
 export type Theme = "light" | "dark";
 
 const STORAGE_KEY = "tb-theme";
+const THEME_EVENT = "tb-theme-change";
 
-function getPreferredTheme(): Theme {
-  if (typeof window === "undefined") return "light";
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "light" || stored === "dark") return stored;
+function isTheme(value: string | null | undefined): value is Theme {
+  return value === "light" || value === "dark";
+}
+
+function readStoredTheme(): Theme | null {
+  try {
+    const stored = window.localStorage.getItem(STORAGE_KEY);
+    return isTheme(stored) ? stored : null;
+  } catch {
+    return null;
+  }
+}
+
+function readDocumentTheme(): Theme | null {
+  const attr = document.documentElement.dataset.theme;
+  return isTheme(attr) ? attr : null;
+}
+
+function systemTheme(): Theme {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function getClientTheme(): Theme {
+  return readDocumentTheme() ?? readStoredTheme() ?? systemTheme();
 }
 
 function applyTheme(theme: Theme) {
@@ -19,23 +39,44 @@ function applyTheme(theme: Theme) {
   document.documentElement.style.colorScheme = theme;
 }
 
+function subscribe(onStoreChange: () => void) {
+  const media = window.matchMedia("(prefers-color-scheme: dark)");
+  const onMedia = () => {
+    // Only react to system changes when the user has not set an explicit preference.
+    if (!readStoredTheme()) {
+      applyTheme(systemTheme());
+      onStoreChange();
+    }
+  };
+
+  window.addEventListener("storage", onStoreChange);
+  window.addEventListener(THEME_EVENT, onStoreChange);
+  media.addEventListener("change", onMedia);
+
+  return () => {
+    window.removeEventListener("storage", onStoreChange);
+    window.removeEventListener(THEME_EVENT, onStoreChange);
+    media.removeEventListener("change", onMedia);
+  };
+}
+
+function getServerTheme(): Theme {
+  return "light";
+}
+
 export function ThemeToggle({ className = "" }: { className?: string }) {
-  const [theme, setTheme] = useState<Theme>("light");
-  const [ready, setReady] = useState(false);
+  const theme = useSyncExternalStore(subscribe, getClientTheme, getServerTheme);
 
-  useEffect(() => {
-    const initial = getPreferredTheme();
-    setTheme(initial);
-    applyTheme(initial);
-    setReady(true);
-  }, []);
-
-  function toggleTheme() {
+  const toggleTheme = useCallback(() => {
     const next: Theme = theme === "dark" ? "light" : "dark";
-    setTheme(next);
     applyTheme(next);
-    window.localStorage.setItem(STORAGE_KEY, next);
-  }
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // Storage can be unavailable in private mode; still update the live document.
+    }
+    window.dispatchEvent(new Event(THEME_EVENT));
+  }, [theme]);
 
   const isDark = theme === "dark";
 
@@ -47,7 +88,6 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
       aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
       aria-pressed={isDark}
       title={isDark ? "Light mode" : "Dark mode"}
-      data-ready={ready ? "true" : "false"}
     >
       <span className="theme-toggle-track" aria-hidden="true">
         <Sun className="theme-icon theme-icon-sun" size={15} />
@@ -58,5 +98,5 @@ export function ThemeToggle({ className = "" }: { className?: string }) {
   );
 }
 
-/** Inline bootstrap script — keep in sync with STORAGE_KEY above. */
+/** Inline bootstrap script — keep STORAGE_KEY in sync with STORAGE_KEY above. */
 export const themeBootstrapScript = `(function(){try{var k='tb-theme';var s=localStorage.getItem(k);var t=(s==='light'||s==='dark')?s:(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;}catch(e){}})();`;

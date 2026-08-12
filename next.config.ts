@@ -6,9 +6,11 @@ import type { NextConfig } from "next";
  * `npm run dev` / `npm run build:sites`.
  */
 const nextConfig: NextConfig = {
-  // Keep marketing assets portable across hosts.
+  // Precompressed static assets work on Netlify and Vinext/Sites without a
+  // remote optimizer. next/image still provides explicit sizing + priority.
   images: {
-    unoptimized: false,
+    unoptimized: true,
+    formats: ["image/webp", "image/avif"],
   },
 };
 
