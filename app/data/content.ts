@@ -10,7 +10,7 @@ export const navItems = [
   ["About", "#about"],
 ] as const;
 
-/** Hash links that still work from /faq and /privacy. */
+/** Hash links that still work from /privacy. */
 export function homeSectionHref(hash: `#${string}`, pathname = "/") {
   return pathname === "/" ? hash : `/${hash}`;
 }

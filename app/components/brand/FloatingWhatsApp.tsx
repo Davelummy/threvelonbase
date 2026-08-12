@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, type MouseEvent, type PointerEvent } from "react";
+import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
 import {
   clampFabPosition,
   FAB_STORAGE_KEY,
@@ -12,6 +12,7 @@ import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
 const DRAG_THRESHOLD_PX = 6;
+const chatHref = whatsappHref("Hello Threvelonbase, I would like to make an enquiry.");
 
 function viewportSize() {
   return {
@@ -20,17 +21,13 @@ function viewportSize() {
   };
 }
 
+function openChat() {
+  window.open(chatHref, "_blank", "noopener,noreferrer");
+}
+
 export function FloatingWhatsApp() {
-  const ref = useRef<HTMLAnchorElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
   const posRef = useRef<FabPosition | null>(null);
-  const dragRef = useRef({
-    pointerId: -1,
-    startX: 0,
-    startY: 0,
-    origX: 0,
-    origY: 0,
-    moved: false,
-  });
   const [position, setPosition] = useState<FabPosition | null>(null);
   const [dragging, setDragging] = useState(false);
 
@@ -42,10 +39,8 @@ export function FloatingWhatsApp() {
     const stored = parseFabPosition(window.localStorage.getItem(FAB_STORAGE_KEY));
     const el = ref.current;
     if (!stored || !el) return;
-    const size = el.offsetWidth;
     const view = viewportSize();
-    const next = clampFabPosition(stored.x, stored.y, size, view.width, view.height);
-    setPosition(next);
+    setPosition(clampFabPosition(stored.x, stored.y, el.offsetWidth, view.width, view.height));
   }, []);
 
   useEffect(() => {
@@ -66,12 +61,15 @@ export function FloatingWhatsApp() {
     };
   }, []);
 
-  function onPointerDown(event: PointerEvent<HTMLAnchorElement>) {
+  function onPointerDown(event: PointerEvent<HTMLButtonElement>) {
     if (event.button !== 0) return;
+    event.preventDefault();
+    event.stopPropagation();
+
     const el = ref.current;
     if (!el) return;
     const rect = el.getBoundingClientRect();
-    dragRef.current = {
+    const drag = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
@@ -79,45 +77,50 @@ export function FloatingWhatsApp() {
       origY: rect.top,
       moved: false,
     };
-    el.setPointerCapture(event.pointerId);
-  }
 
-  function onPointerMove(event: PointerEvent<HTMLAnchorElement>) {
-    const drag = dragRef.current;
-    if (drag.pointerId !== event.pointerId) return;
-    const dx = event.clientX - drag.startX;
-    const dy = event.clientY - drag.startY;
-    if (!drag.moved && dx * dx + dy * dy < DRAG_THRESHOLD_PX * DRAG_THRESHOLD_PX) {
-      return;
-    }
-    drag.moved = true;
-    setDragging(true);
-    const size = ref.current?.offsetWidth ?? 58;
-    const view = viewportSize();
-    const next = clampFabPosition(drag.origX + dx, drag.origY + dy, size, view.width, view.height);
-    posRef.current = next;
-    setPosition(next);
-  }
-
-  function endDrag(event: PointerEvent<HTMLAnchorElement>) {
-    const drag = dragRef.current;
-    if (drag.pointerId !== event.pointerId) return;
-    ref.current?.releasePointerCapture(event.pointerId);
-    drag.pointerId = -1;
-    if (drag.moved && posRef.current) {
-      try {
-        window.localStorage.setItem(FAB_STORAGE_KEY, JSON.stringify(posRef.current));
-      } catch {
-        // Private mode can block storage; the in-session position still works.
+    const onMove = (moveEvent: globalThis.PointerEvent) => {
+      if (moveEvent.pointerId !== drag.pointerId) return;
+      const dx = moveEvent.clientX - drag.startX;
+      const dy = moveEvent.clientY - drag.startY;
+      if (!drag.moved && dx * dx + dy * dy < DRAG_THRESHOLD_PX * DRAG_THRESHOLD_PX) {
+        return;
       }
-    }
-    setDragging(false);
+      drag.moved = true;
+      moveEvent.preventDefault();
+      setDragging(true);
+      const size = ref.current?.offsetWidth ?? 58;
+      const view = viewportSize();
+      const next = clampFabPosition(drag.origX + dx, drag.origY + dy, size, view.width, view.height);
+      posRef.current = next;
+      setPosition(next);
+    };
+
+    const onUp = (upEvent: globalThis.PointerEvent) => {
+      if (upEvent.pointerId !== drag.pointerId) return;
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
+      setDragging(false);
+      if (drag.moved && posRef.current) {
+        try {
+          window.localStorage.setItem(FAB_STORAGE_KEY, JSON.stringify(posRef.current));
+        } catch {
+          // Private mode can block storage; the in-session position still works.
+        }
+        return;
+      }
+      openChat();
+    };
+
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    window.addEventListener("pointercancel", onUp);
   }
 
-  function onClick(event: MouseEvent<HTMLAnchorElement>) {
-    if (!dragRef.current.moved) return;
+  function onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
+    if (event.key !== "Enter" && event.key !== " ") return;
     event.preventDefault();
-    dragRef.current.moved = false;
+    openChat();
   }
 
   const className = [
@@ -129,25 +132,19 @@ export function FloatingWhatsApp() {
     .join(" ");
 
   return (
-    <a
+    <button
       ref={ref}
+      type="button"
       className={className}
       style={position ? { left: position.x, top: position.y } : undefined}
-      target="_blank"
-      rel="noreferrer"
-      draggable={false}
       aria-label={withNewTabLabel("Chat with Threvelonbase on WhatsApp")}
-      title="Drag to move. Open to chat on WhatsApp."
-      href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry.")}
+      title="Drag to move. Tap to chat on WhatsApp."
       onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={endDrag}
-      onPointerCancel={endDrag}
-      onClick={onClick}
+      onKeyDown={onKeyDown}
     >
       <span className="floating-whatsapp-glass" aria-hidden="true" />
       <WhatsAppIcon size={28} className="floating-whatsapp-icon" />
       <NewTabHint />
-    </a>
+    </button>
   );
 }

@@ -249,10 +249,11 @@ test("renders FAQ answers and legal page links without inventing prices or warra
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i);
   assert.ok(main, "landing page main should be present");
   assert.ok(footer, "footer should be present");
-  assert.match(main[0], /href=["']\/faq["']/);
+  assert.match(html, /["']@type["']:["']FAQPage["']/);
   assert.match(main[0], /href=["']\/privacy["']/);
-  assert.match(footer[0], /href=["']\/faq["']/);
   assert.match(footer[0], /href=["']\/privacy["']/);
+  assert.doesNotMatch(footer[0], /href=["']\/faq["']/);
+  assert.doesNotMatch(main[0], /href=["']\/faq["']/);
 });
 
 test("sticks a single glass header to the top of the page", () => {

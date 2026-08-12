@@ -637,28 +637,6 @@ body {
   font-size: var(--text-sm);
   line-height: var(--leading-loose);
 }
-.faq-legal-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px 22px;
-  margin: 22px 0 0;
-  max-width: 860px;
-  font-size: var(--text-sm);
-  font-weight: var(--weight-bold);
-}
-.faq-legal-links a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  color: var(--orange-readable);
-  border-bottom: 1px solid color-mix(in srgb, var(--orange) 55%, transparent);
-}
-.faq-legal-links a:hover,
-.faq-legal-links a:focus-visible {
-  color: var(--navy);
-  border-bottom-color: var(--navy);
-}
 
 .info-page {
   padding: 64px 0 112px;
@@ -1087,10 +1065,14 @@ body {
   height: 58px;
   display: grid;
   place-items: center;
+  appearance: none;
+  -webkit-appearance: none;
+  padding: 0;
   touch-action: none;
   cursor: grab;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-user-drag: none;
   color: white;
   border-radius: 50%;
   isolation: isolate;

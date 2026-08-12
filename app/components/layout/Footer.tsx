@@ -48,8 +48,6 @@ export function Footer() {
                 </Link>
               ))}
               <Link href="/#repair-request">Start a repair</Link>
-              <Link href="/faq">FAQ</Link>
-              <Link href="/privacy">Privacy</Link>
             </nav>
           </div>
 
@@ -132,8 +130,6 @@ export function Footer() {
             <p className="footer-privacy">
               Enquiries open as WhatsApp drafts on your device. This website does not keep a customer account or store repair form submissions.{" "}
               <Link href="/privacy">Privacy</Link>
-              {" · "}
-              <Link href="/faq">FAQ</Link>
             </p>
           </div>
           <span className="footer-values">

@@ -13,7 +13,7 @@ import {
   ServicesSection,
   ValuesSection,
 } from "./components/sections/HomeSections";
-import { FaqSection } from "./components/sections/FaqSection";
+import { FaqJsonLd, FaqSection } from "./components/sections/FaqSection";
 import { absoluteSiteUrl, siteOrigin } from "./data/business";
 import { homepageDescription, homepageTitle } from "./data/content";
 
@@ -51,6 +51,7 @@ export default function Home() {
         <FaqSection />
         <ContactSection />
       </main>
+      <FaqJsonLd />
       <ScrollMotion />
     </>
   );

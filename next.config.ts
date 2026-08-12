@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     unoptimized: true,
     formats: ["image/webp", "image/avif"],
   },
+  async redirects() {
+    return [{ source: "/faq", destination: "/#faq", permanent: false }];
+  },
 };
 
 export default nextConfig;

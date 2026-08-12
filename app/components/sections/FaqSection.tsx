@@ -1,31 +1,21 @@
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
 import { faqItems } from "../../data/faq";
 
-type FaqSectionProps = {
-  heading?: "h1" | "h2";
-  /** Homepage scroll motion. Off on /faq, where that runtime is not mounted. */
-  animate?: boolean;
-};
-
-export function FaqSection({ heading = "h2", animate = true }: FaqSectionProps) {
-  const Heading = heading;
-  const motionClass = animate ? "gs-hidden" : undefined;
-
+export function FaqSection() {
   return (
     <section className="faq section" id="faq">
       <div className="shell">
-        <div className={`section-heading split-heading ${motionClass ?? ""}`.trim()} data-gs={animate ? "fade-up" : undefined}>
+        <div className="section-heading split-heading gs-hidden" data-gs="fade-up">
           <div>
             <p className="eyebrow"><span /> Questions</p>
-            <Heading>Clear answers before you bring the device.</Heading>
+            <h2>Clear answers before you bring the device.</h2>
           </div>
           <p>
             These answers match how the workshop already works: diagnosis first,
             WhatsApp for enquiries, and no repair details stored on this website.
           </p>
         </div>
-        <div className={`faq-list ${motionClass ?? ""}`.trim()} data-gs={animate ? "stagger" : undefined}>
+        <div className="faq-list gs-hidden" data-gs="stagger">
           {faqItems.map((item) => (
             <details className="faq-item" key={item.id}>
               <summary>
@@ -36,12 +26,6 @@ export function FaqSection({ heading = "h2", animate = true }: FaqSectionProps) 
             </details>
           ))}
         </div>
-        {heading === "h2" ? (
-          <p className="faq-legal-links">
-            <Link href="/faq">FAQ page</Link>
-            <Link href="/privacy">Privacy</Link>
-          </p>
-        ) : null}
       </div>
     </section>
   );

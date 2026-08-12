@@ -190,8 +190,6 @@ export function RepairRequestSection() {
           <p className="request-privacy">
             This page does not store repair form submissions in a website account or database. Continuing hands your reviewed message to WhatsApp on your device.{" "}
             <Link href="/privacy">Privacy</Link>
-            {" · "}
-            <Link href="/faq">FAQ</Link>
           </p>
         </div>
         <div className="gs-hidden" data-gs="fade-right">

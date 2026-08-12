@@ -196,17 +196,8 @@ test.describe("Threvelonbase smoke", () => {
       expect(toggle!.x).toBeGreaterThan(cta!.x);
     }
 
-    await expect(page.locator("#faq").getByRole("link", { name: "FAQ page" })).toBeVisible();
-    await expect(page.locator("#faq").getByRole("link", { name: "Privacy" })).toBeVisible();
-
-    await page.goto("/faq");
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Clear answers before you bring the device.",
-    );
-    await expect(page.getByText("What devices do you repair?")).toBeVisible();
-    const faqHeader = await page.locator("header.site-header").boundingBox();
-    expect(faqHeader?.y ?? -1).toBe(0);
+    await expect(page.locator("#faq")).toBeAttached();
+    await expect(page.getByRole("heading", { name: "Clear answers before you bring the device." })).toBeAttached();
 
     await page.goto("/privacy");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
@@ -217,7 +208,7 @@ test.describe("Threvelonbase smoke", () => {
 
   test("floating WhatsApp button can be dragged without opening chat", async ({ page }) => {
     await page.goto("/");
-    const fab = page.locator("a.floating-whatsapp");
+    const fab = page.locator(".floating-whatsapp");
     await expect(fab).toBeVisible();
     const before = await fab.boundingBox();
     expect(before).toBeTruthy();

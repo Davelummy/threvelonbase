@@ -5,22 +5,22 @@ import test, { before } from "node:test";
 import { fileURLToPath } from "node:url";
 
 const root = path.resolve(fileURLToPath(new URL("..", import.meta.url)));
-const faqHtmlPath = path.join(root, ".next", "server", "app", "faq.html");
+const homepageHtmlPath = path.join(root, ".next", "server", "app", "index.html");
 const privacyHtmlPath = path.join(root, ".next", "server", "app", "privacy.html");
 
-let faqHtml;
+let homepageHtml;
 let privacyHtml;
 
 before(async () => {
-  faqHtml = await readFile(faqHtmlPath, "utf8");
+  homepageHtml = await readFile(homepageHtmlPath, "utf8");
   privacyHtml = await readFile(privacyHtmlPath, "utf8");
 });
 
-test("renders the FAQ page with structured questions", () => {
-  assert.match(faqHtml, /<h1\b[^>]*>Clear answers before you bring the device\.<\/h1>/);
-  assert.match(faqHtml, /["']@type["']:["']FAQPage["']/);
-  assert.match(faqHtml, /Do I get a price before work starts\?/);
-  assert.doesNotMatch(faqHtml, /lifetime warranty|₦|guaranteed same-day/i);
+test("keeps FAQ on the homepage instead of a separate page", () => {
+  assert.match(homepageHtml, /id=["']faq["']/);
+  assert.match(homepageHtml, /["']@type["']:["']FAQPage["']/);
+  assert.match(homepageHtml, /Do I get a price before work starts\?/);
+  assert.doesNotMatch(homepageHtml, /lifetime warranty|₦|guaranteed same-day/i);
 });
 
 test("renders the privacy page with the actual website boundary", () => {
