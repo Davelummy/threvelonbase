@@ -17,16 +17,8 @@ const originMetadata: Metadata = siteOrigin
     }
   : {};
 
-// The existing preview contract is useful outside production. Never expose
-// its development marker in a production build or production request.
-const previewMetadata =
-  process.env.NODE_ENV === "production"
-    ? {}
-    : { other: { "codex-preview": "development" } };
-
 export const metadata: Metadata = {
   ...originMetadata,
-  ...previewMetadata,
   title: homepageTitle,
   description: homepageDescription,
   openGraph: {

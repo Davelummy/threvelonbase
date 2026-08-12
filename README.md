@@ -1,81 +1,54 @@
 # Threvelonbase
 
 Threvelonbase is a repair-first electronics site for phones, laptops and
-everyday devices in Akure. The homepage also routes enquiries for devices,
+everyday devices in Akure. The homepage routes enquiries for devices,
 accessories, technical training and business services to WhatsApp.
 
-## Stack and Lifecycle
+## Stack
 
 - Node.js `>=22.13.0`
-- App Router under `app/` (shared source for both hosts)
-- Local/ChatGPT Sites: Vite with [Vinext](https://github.com/cloudflare/vinext)
-  and the Cloudflare Vite plugin
-- Production host: **Netlify** (standard `next build` + OpenNext adapter)
+- Next.js App Router under `app/`
+- Production host: **Netlify** (`next build` + `@netlify/plugin-nextjs`)
 
-This project does not use `wrangler.jsonc`. Cloudflare D1/R2 remain unconfigured.
+Production site: https://threvelonbase.netlify.app
 
-### Netlify (primary production)
+## Local development
 
-1. Connect the GitHub repo in Netlify.
-2. Prefer **Build settings from `netlify.toml`** (clear UI overrides if the
+```bash
+npm ci
+npm run dev
+```
+
+Other commands:
+
+- `npm run build` — production Next.js build
+- `npm run start` — serve the production build
+- `npm run lint` — ESLint
+- `npm test` — production build plus contract tests
+- `npm run build:netlify` — alias for the Netlify production build
+
+## Netlify deployment
+
+1. Connect the GitHub repository in Netlify.
+2. Prefer **build settings from `netlify.toml`** (clear UI overrides if the
    dashboard forced `command` / `publish` earlier). Safe UI values if needed:
-   - **Build command:** `npm run build` (detects Netlify and runs `next build`)
+   - **Build command:** `npm run build`
    - **Publish directory:** leave default / `.next` (OpenNext plugin)
    - **Node:** `22.13.0`
-3. In **Site settings → Environment variables**, set:
+3. Optional environment variable:
 
    | Variable | Example |
    | --- | --- |
-   | `NEXT_PUBLIC_SITE_URL` | `https://your-site.netlify.app` or your custom domain |
+   | `NEXT_PUBLIC_SITE_URL` | `https://threvelonbase.netlify.app` or your custom domain |
 
    Use the final public origin only (scheme + host, no path). Without it the
-   site still deploys; absolute canonical/OG/sitemap/JSON-LD URLs stay omitted
-   by design.
+   site still deploys; absolute canonical, Open Graph, sitemap and JSON-LD
+   URLs stay omitted by design.
 
-4. Deploy. Netlify’s Next.js runtime handles SSR/static assets automatically.
+4. Deploy. Netlify’s Next.js runtime handles SSR and static assets.
 
-Useful Netlify commands locally (optional CLI):
+## Persistence boundary
 
-- `NETLIFY=true npm run build` or `npm run build:netlify`, then `npm run start:next`
-
-### Sites / Vinext (local + optional ChatGPT Sites)
-
-The Sites lifecycle may install dependencies before a checkout is returned and
-run `npm run build` / `npm run build:sites` against the pushed commit.
-
-`npm run install:ci` is a bounded, non-retrying `npm ci`. The install and build
-helpers target the Linux Sites environment and require `flock`, `curl`,
-`sha256sum`, and GNU `timeout`; they are not native macOS install/build scripts.
-Project-scoped HOME, npm cache, XDG, temporary files and Wrangler logs are
-provided by `scripts/sites-env.sh`. `.sites-runtime/` is disposable.
-
-Useful commands:
-
-- `npm run dev`: run the local Vite/Vinext server
-- `npm run start`: serve the built Vinext application
-- `npm run build` / `npm run build:sites`: build and validate the Sites artifact
-- `npm run build:netlify`: production Next.js build for Netlify
-- `npm test`: Sites build + rendered HTML / repair enquiry contract tests
-- `npm run validate:artifact`: validate an existing Sites build artifact
-
-## ChatGPT Sites Auth
-
-`app/chatgpt-auth.ts` provides optional dispatch-owned Sign in with ChatGPT
-helpers. Use `getChatGPTUser()` for optional identity and
-`requireChatGPTUser(returnTo)` for protected server-rendered pages. Use the path
-helpers for sign-in/sign-out links and pass only same-origin relative return
-paths. Protected pages must be dynamic because identity comes from request
-headers.
-
-The hosting platform owns `/signin-with-chatgpt`, `/signout-with-chatgpt`,
-`/callback`, OAuth cookies and identity injection. SIWC establishes identity, not
-workspace membership; use Sites access policies or an explicit membership check
-when a page needs restriction. Public marketing content remains anonymous.
-
-## Persistence Boundary
-
-Cloudflare D1 and R2 are intentionally unconfigured: `.openai/hosting.json`
-keeps both `d1` and `r2` set to `null`, and the root schema is empty. The D1
-example and Drizzle tooling are opt-in scaffolding only. Do not add production
-repair tracking, migrations, uploads or payment persistence until data models,
-privacy, access controls and real bindings are approved and configured.
+The public site does not include a database or authenticated customer area.
+Enquiries hand off to WhatsApp. See `docs/repair-tracker-architecture.md` for
+a design-only outline of a possible future internal repair tracker.

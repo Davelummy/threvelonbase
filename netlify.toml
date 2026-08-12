@@ -1,14 +1,13 @@
 # Threvelonbase — Netlify production host
 # https://docs.netlify.com/build/frameworks/framework-setup-guides/nextjs/overview/
 #
-# IMPORTANT: If Site settings → Build & deploy override these values, clear
-# the UI overrides so this file wins (or keep UI command as `npm run build`).
-# Netlify always sets NETLIFY=true, which makes `npm run build` run `next build`.
+# Prefer build settings from this file. Clear UI overrides if the dashboard
+# forced a different command or publish directory.
 
 [build]
   command = "npm run build"
-  # Leave publish empty for the OpenNext Next.js plugin. Do not set
-  # publish = ".next" in the Netlify UI — the plugin owns the publish dir.
+  # Publish directory for the Next.js build output. Prefer this file over
+  # conflicting UI overrides so Netlify and local docs stay aligned.
   publish = ".next"
 
 [build.environment]
