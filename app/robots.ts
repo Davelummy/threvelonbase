@@ -1,10 +1,8 @@
 import type { MetadataRoute } from "next";
-import { siteOrigin } from "./data/business";
+import { absoluteSiteUrl } from "./data/business";
 
 export default function robots(): MetadataRoute.Robots {
-  const sitemapUrl = siteOrigin
-    ? new URL("/sitemap.xml", siteOrigin).toString()
-    : undefined;
+  const sitemapUrl = absoluteSiteUrl("/sitemap.xml");
 
   return {
     rules: { userAgent: "*", allow: "/" },

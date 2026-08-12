@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react";
 import { deviceOptions, issueOptions } from "../../data/content";
 import { repairWhatsappHref, validateRepairForm, type RepairFormErrors, type RepairFormValues } from "../../../lib/whatsapp";
+import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
 import { WhatsAppIcon } from "../brand/WhatsAppIcon";
 
 const initialForm: RepairFormValues = {
@@ -105,9 +106,24 @@ export function RepairForm() {
         {fieldError("details")}
       </label>
       <button className="button button-primary form-submit" type="submit">Continue on WhatsApp <WhatsAppIcon size={18} /></button>
-      <p className="form-note">Your details are placed in a WhatsApp draft for you to review. Attach photos or videos after WhatsApp opens.</p>
+      <p className="form-note">
+        Your details are placed in a WhatsApp draft for you to review and edit before sending.
+        This website does not keep a copy of the form after you leave the page. Attach photos or videos after WhatsApp opens.
+      </p>
       <p className="form-status" role={Object.keys(errors).length > 0 ? "alert" : "status"} aria-live="polite">{status}</p>
-      {fallbackHref ? <p className="form-fallback"><a href={fallbackHref} target="_blank" rel="noreferrer">Open WhatsApp directly</a></p> : null}
+      {fallbackHref ? (
+        <p className="form-fallback">
+          <a
+            href={fallbackHref}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={withNewTabLabel("Open WhatsApp directly")}
+          >
+            Open WhatsApp directly
+            <NewTabHint />
+          </a>
+        </p>
+      ) : null}
     </form>
   );
 }

@@ -1,4 +1,4 @@
-import { business, siteOrigin } from "../../data/business";
+import { absoluteSiteUrl, business } from "../../data/business";
 import { repairTypes, serviceCards } from "../../data/content";
 
 const weekDays = [
@@ -11,9 +11,7 @@ const weekDays = [
 ];
 
 export function LocalBusinessJsonLd() {
-  const homepageUrl = siteOrigin
-    ? new URL("/", siteOrigin).toString()
-    : undefined;
+  const homepageUrl = absoluteSiteUrl("/");
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",

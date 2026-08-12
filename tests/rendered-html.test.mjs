@@ -215,3 +215,9 @@ test("serves optimized WebP hero and academy assets", () => {
   assert.doesNotMatch(html, /threvelonbase-repair-hero\.png/);
   assert.doesNotMatch(html, /threvelonbase-academy-hands-on\.jpg/);
 });
+
+test("documents new-tab behaviour for external links and WhatsApp drafts", () => {
+  assert.match(html, /opens in a new tab/i);
+  assert.match(html, /does not store repair form submissions/i);
+  assert.match(html, /WhatsApp draft/i);
+});

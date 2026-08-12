@@ -26,6 +26,7 @@ import { business } from "../../data/business";
 import type { EnquiryCategory } from "../../data/content";
 import { repairTypes, serviceCards } from "../../data/content";
 import { enquiryWhatsappHref, whatsappHref } from "../../../lib/whatsapp";
+import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
 import { WhatsAppIcon } from "../brand/WhatsAppIcon";
 import { RepairForm } from "../forms/RepairForm";
 
@@ -92,12 +93,22 @@ export function ServicesSection() {
             const Icon = iconMap[service.icon];
             const external = service.href.startsWith("whatsapp:");
             return (
-              <a className="service-card" href={enquiryLink(service.href)} key={service.number} target={external ? "_blank" : undefined} rel={external ? "noreferrer" : undefined}>
+              <a
+                className="service-card"
+                href={enquiryLink(service.href)}
+                key={service.number}
+                target={external ? "_blank" : undefined}
+                rel={external ? "noreferrer" : undefined}
+                aria-label={external ? withNewTabLabel(`${service.action}: ${service.title}`) : undefined}
+              >
                 <span className="service-number">{service.number}</span>
                 <span className="service-icon"><Icon aria-hidden="true" /></span>
                 <h3>{service.title}</h3>
                 <p>{service.copy}</p>
-                <span className="card-link">{service.action} <ChevronRight aria-hidden="true" size={17} /></span>
+                <span className="card-link">
+                  {service.action} <ChevronRight aria-hidden="true" size={17} />
+                  {external ? <NewTabHint /> : null}
+                </span>
               </a>
             );
           })}
@@ -132,11 +143,17 @@ export function ProcessSection() {
   return (
     <section className="process section">
       <div className="shell">
-        <div className="section-heading centered-heading gs-hidden" data-gs="fade-up"><p className="eyebrow"><span /> How it works</p><h2>A clearer way to start your repair.</h2></div>
+        <div className="section-heading centered-heading gs-hidden" data-gs="fade-up">
+          <p className="eyebrow"><span /> How it works</p>
+          <h2>A clearer way to start your repair.</h2>
+          <p className="section-lead">
+            The website collects a short repair brief, then opens WhatsApp so you can review the message and continue with the workshop.
+          </p>
+        </div>
         <div className="process-grid gs-hidden" data-gs="stagger">
-          <article><span>01</span><MessageCircle aria-hidden="true" /><h3>Describe the fault</h3><p>Share the device and problem through our short request form.</p></article>
-          <article><span>02</span><Cpu aria-hidden="true" /><h3>Get a diagnosis</h3><p>The workshop checks the device and explains the required work.</p></article>
-          <article><span>03</span><BadgeCheck aria-hidden="true" /><h3>Approve the repair</h3><p>Work begins after the price, deposit and expected timing are agreed.</p></article>
+          <article><span>01</span><MessageCircle aria-hidden="true" /><h3>Describe the fault</h3><p>Share the device and problem through our short request form on this page.</p></article>
+          <article><span>02</span><Cpu aria-hidden="true" /><h3>Continue on WhatsApp</h3><p>Your details are placed in a WhatsApp draft you can edit before sending. Photos or videos can be attached after WhatsApp opens.</p></article>
+          <article><span>03</span><BadgeCheck aria-hidden="true" /><h3>Approve before work starts</h3><p>The workshop diagnoses the device and explains the required work. Work begins only after you agree the price, deposit and expected timing.</p></article>
         </div>
       </div>
     </section>
@@ -150,7 +167,15 @@ export function RepairRequestSection() {
         <div className="request-copy gs-hidden" data-gs="fade-left">
           <p className="eyebrow light"><span /> Repair request</p><h2>Tell us about your device.</h2>
           <p>Complete the essentials and continue on WhatsApp. A technician will review your message and guide you on the next step.</p>
-          <ul><li><Check aria-hidden="true" /> No online payment is required here</li><li><Check aria-hidden="true" /> You approve the price before work begins</li><li><Check aria-hidden="true" /> Repair timing is confirmed after diagnosis</li></ul>
+          <ul>
+            <li><Check aria-hidden="true" /> No online payment is collected on this website</li>
+            <li><Check aria-hidden="true" /> Form details open as a WhatsApp draft you control before sending</li>
+            <li><Check aria-hidden="true" /> You approve the price before work begins</li>
+            <li><Check aria-hidden="true" /> Repair timing is confirmed after diagnosis</li>
+          </ul>
+          <p className="request-privacy">
+            This page does not store repair form submissions in a website account or database. Continuing hands your reviewed message to WhatsApp on your device.
+          </p>
         </div>
         <div className="gs-hidden" data-gs="fade-right">
           <RepairForm />
@@ -175,18 +200,20 @@ export function CommerceSection() {
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("phones")}
-              aria-label="Ask about a new phone on WhatsApp"
+              aria-label={withNewTabLabel("Ask about a new phone on WhatsApp")}
             >
               Ask about a new phone <ArrowRight aria-hidden="true" size={18} />
+              <NewTabHint />
             </a>
             <a
               className="button button-secondary"
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("usedPhones")}
-              aria-label="Ask about a used phone on WhatsApp"
+              aria-label={withNewTabLabel("Ask about a used phone on WhatsApp")}
             >
               Ask about a used phone <ArrowRight aria-hidden="true" size={18} />
+              <NewTabHint />
             </a>
           </div>
         </article>
@@ -200,9 +227,10 @@ export function CommerceSection() {
             target="_blank"
             rel="noreferrer"
             href={enquiryWhatsappHref("accessories")}
-            aria-label="Ask about an accessory on WhatsApp"
+            aria-label={withNewTabLabel("Ask about an accessory on WhatsApp")}
           >
             Ask about an accessory <ArrowRight aria-hidden="true" size={18} />
+            <NewTabHint />
           </a>
         </article>
       </div>
@@ -239,9 +267,10 @@ export function AcademySection() {
             target="_blank"
             rel="noreferrer"
             href={enquiryWhatsappHref("training")}
-            aria-label="Ask about training or apprenticeship on WhatsApp"
+            aria-label={withNewTabLabel("Ask about training or apprenticeship on WhatsApp")}
           >
             Ask about the academy <ArrowRight aria-hidden="true" size={18} />
+            <NewTabHint />
           </a>
         </div>
       </div>
@@ -271,9 +300,10 @@ export function BusinessSection() {
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("repairBusinessSetup")}
-              aria-label="Discuss repair-business setup on WhatsApp"
+              aria-label={withNewTabLabel("Discuss repair-business setup on WhatsApp")}
             >
               Discuss repair-business setup <ArrowRight aria-hidden="true" size={16} />
+              <NewTabHint />
             </a>
           </article>
           <article>
@@ -286,9 +316,10 @@ export function BusinessSection() {
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("institutionalTraining")}
-              aria-label="Discuss institutional training on WhatsApp"
+              aria-label={withNewTabLabel("Discuss institutional training on WhatsApp")}
             >
               Discuss institutional training <ArrowRight aria-hidden="true" size={16} />
+              <NewTabHint />
             </a>
           </article>
           <article>
@@ -301,9 +332,10 @@ export function BusinessSection() {
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("consultancy")}
-              aria-label="Discuss business consultancy on WhatsApp"
+              aria-label={withNewTabLabel("Discuss business consultancy on WhatsApp")}
             >
               Discuss business consultancy <ArrowRight aria-hidden="true" size={16} />
+              <NewTabHint />
             </a>
           </article>
           <article>
@@ -348,12 +380,38 @@ export function ContactSection() {
           <p className="contact-lead">For the fastest response, send a WhatsApp message or call during business hours.</p>
         </div>
         <div className="contact-details gs-hidden" data-gs="stagger">
-          <a href={business.mapsUrl} target="_blank" rel="noreferrer"><MapPin aria-hidden="true" /><address><strong>Workshop</strong>{business.address.shop}, {business.address.complex},<br />{business.address.street}, {business.address.locality}, {business.address.region}</address></a>
+          <a
+            href={business.mapsUrl}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={withNewTabLabel("Open workshop location in Maps")}
+          >
+            <MapPin aria-hidden="true" />
+            <address>
+              <strong>Workshop</strong>
+              {business.address.shop}, {business.address.complex},
+              <br />
+              {business.address.street}, {business.address.locality}, {business.address.region}
+            </address>
+            <NewTabHint />
+          </a>
           <a href={business.phones[0].href}><Phone aria-hidden="true" /><span><strong>Call us</strong>{business.phones[0].display}</span></a>
           <a href={business.phones[1].href}><Phone aria-hidden="true" /><span><strong>Alternative line</strong>{business.phones[1].display}</span></a>
           <div><Clock3 aria-hidden="true" /><span><strong>Business hours</strong><time dateTime="Mo-Sa 08:00-18:00">{business.hours.days}<br />{business.hours.display}</time></span></div>
         </div>
-        <a className="contact-whatsapp gs-hidden" data-gs="fade-up" target="_blank" rel="noreferrer" href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry about a repair, phone, accessory, training, or business service.")}><WhatsAppIcon size={27} /><span><strong>Chat on WhatsApp</strong>Usually the fastest way to reach us</span><ArrowRight aria-hidden="true" /></a>
+        <a
+          className="contact-whatsapp gs-hidden"
+          data-gs="fade-up"
+          target="_blank"
+          rel="noreferrer"
+          href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry about a repair, phone, accessory, training, or business service.")}
+          aria-label={withNewTabLabel("Chat on WhatsApp")}
+        >
+          <WhatsAppIcon size={27} />
+          <span><strong>Chat on WhatsApp</strong>Usually the fastest way to reach us</span>
+          <ArrowRight aria-hidden="true" />
+          <NewTabHint />
+        </a>
       </div>
     </section>
   );
@@ -365,11 +423,12 @@ export function FloatingWhatsApp() {
       className="floating-whatsapp"
       target="_blank"
       rel="noreferrer"
-      aria-label="Chat with Threvelonbase on WhatsApp"
+      aria-label={withNewTabLabel("Chat with Threvelonbase on WhatsApp")}
       href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry.")}
     >
       <span className="floating-whatsapp-glass" aria-hidden="true" />
       <WhatsAppIcon size={28} className="floating-whatsapp-icon" />
+      <NewTabHint />
     </a>
   );
 }
