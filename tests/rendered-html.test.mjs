@@ -69,6 +69,15 @@ test("weights the repair service card and keeps the secondary hero as a text pat
   assert.doesNotMatch(html, /class="service-number"/);
 });
 
+test("prints the motto once in the footer brand, not under the wordmark", () => {
+  const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i);
+  assert.ok(footer, "footer should be present");
+  const motto = footer[0].match(/Technology Evolution and Revolution/gi) ?? [];
+  assert.equal(motto.length, 1);
+  assert.match(footer[0], /footer-tagline/);
+  assert.match(footer[0], /wordmark-compact/);
+});
+
 test("keeps the repair-first H1, CTA, and section anchors", () => {
   const headings = [...html.matchAll(/<h1\b[^>]*>([\s\S]*?)<\/h1>/gi)];
   assert.equal(headings.length, 1);
@@ -215,8 +224,9 @@ test("marks every new-tab external link safe against opener access", () => {
   }
 });
 
-test("serves optimized WebP hero and academy assets", () => {
+test("serves distinct WebP hero, featured repair, and academy assets", () => {
   assert.match(html, /threvelonbase-repair-hero\.webp/);
+  assert.match(html, /threvelonbase-repair-featured\.webp/);
   assert.match(html, /threvelonbase-academy-hands-on\.webp/);
   assert.doesNotMatch(html, /threvelonbase-repair-hero\.png/);
   assert.doesNotMatch(html, /threvelonbase-academy-hands-on\.jpg/);

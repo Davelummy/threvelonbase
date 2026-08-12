@@ -105,7 +105,7 @@ export function ServicesSection() {
                 {featured ? (
                   <span className="service-featured-media" aria-hidden="true">
                     <Image
-                      src="/images/threvelonbase-repair-hero.webp"
+                      src="/images/threvelonbase-repair-featured.webp"
                       alt=""
                       width={720}
                       height={540}

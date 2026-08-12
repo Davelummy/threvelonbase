@@ -20,7 +20,7 @@ export function Footer() {
         <div className="footer-top">
           <div className="footer-brand">
             <a className="footer-wordmark" href="#top" aria-label="Threvelonbase home">
-              <Wordmark reversed />
+              <Wordmark reversed compact />
             </a>
             <p className="footer-tagline">{business.tagline}</p>
             <p className="footer-blurb">
