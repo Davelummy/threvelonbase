@@ -42,7 +42,7 @@ export function Footer() {
           <div className="footer-col">
             <strong className="footer-heading">Explore</strong>
             <nav className="footer-links" aria-label="Footer navigation">
-              {navItems.map(([label, href]) => (
+              {navItems.filter(([, href]) => href !== "#repairs").map(([label, href]) => (
                 <Link href={rootedSectionHref(href)} key={href}>
                   {label}
                 </Link>
