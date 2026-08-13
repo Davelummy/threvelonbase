@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent, type PointerEvent } from "react";
-import {
-  clampFabPosition,
-  FAB_STORAGE_KEY,
-  parseFabPosition,
-  type FabPosition,
-} from "../../../lib/fab-position";
+import { clampFabPosition, type FabPosition } from "../../../lib/fab-position";
 import { whatsappHref } from "../../../lib/whatsapp";
 import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
 import { WhatsAppIcon } from "./WhatsAppIcon";
@@ -44,11 +39,12 @@ export function FloatingWhatsApp() {
     const el = ref.current;
     if (!el) return;
     const size = el.offsetWidth || 58;
-    const stored = parseFabPosition(window.localStorage.getItem(FAB_STORAGE_KEY));
-    const view = viewportSize();
-    const next = stored
-      ? clampFabPosition(stored.x, stored.y, size, view.width, view.height)
-      : defaultCorner(size);
+    try {
+      window.localStorage.removeItem("tb-wa-fab");
+    } catch {
+      // Private mode can block storage; a reload still starts in the default corner.
+    }
+    const next = defaultCorner(size);
     posRef.current = next;
     setPosition(next);
   }, []);
@@ -124,14 +120,7 @@ export function FloatingWhatsApp() {
         el.releasePointerCapture(event.pointerId);
       }
       setDragging(false);
-      if (drag.moved && posRef.current) {
-        try {
-          window.localStorage.setItem(FAB_STORAGE_KEY, JSON.stringify(posRef.current));
-        } catch {
-          // Private mode can block storage; the in-session position still works.
-        }
-        return;
-      }
+      if (drag.moved) return;
       openChat();
     };
 

@@ -1,4 +1,3 @@
-export const FAB_STORAGE_KEY = "tb-wa-fab";
 export const FAB_EDGE_PAD = 8;
 
 export type FabPosition = {
@@ -22,14 +21,3 @@ export function clampFabPosition(
   };
 }
 
-export function parseFabPosition(value: string | null): FabPosition | null {
-  if (!value) return null;
-  try {
-    const parsed = JSON.parse(value) as Partial<FabPosition>;
-    if (typeof parsed.x !== "number" || typeof parsed.y !== "number") return null;
-    if (!Number.isFinite(parsed.x) || !Number.isFinite(parsed.y)) return null;
-    return { x: parsed.x, y: parsed.y };
-  } catch {
-    return null;
-  }
-}

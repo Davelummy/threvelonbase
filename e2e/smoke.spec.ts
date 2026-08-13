@@ -253,7 +253,8 @@ test.describe("Threvelonbase smoke", () => {
     await expect
       .poll(async () => {
         const box = await fab.boundingBox();
-        return box ? Math.abs(box.x - after!.x) : 999;
+        if (!box) return 999;
+        return Math.max(Math.abs(box.x - before!.x), Math.abs(box.y - before!.y));
       })
       .toBeLessThan(6);
   });

@@ -27,7 +27,8 @@ test("renders the privacy page with the actual website boundary", () => {
   assert.match(privacyHtml, /<h1\b[^>]*>How this website handles your information\.<\/h1>/);
   assert.match(privacyHtml, /does not store repair form submissions/i);
   assert.match(privacyHtml, /tb-theme/);
-  assert.match(privacyHtml, /tb-wa-fab/);
+  assert.doesNotMatch(privacyHtml, /tb-wa-fab/);
+  assert.match(privacyHtml, /dragged WhatsApp button only stays moved until you reload/i);
   assert.match(privacyHtml, /WhatsApp/);
   assert.match(privacyHtml, /Google Maps/);
   assert.doesNotMatch(privacyHtml, /customer account is created/i);
