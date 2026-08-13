@@ -10,7 +10,7 @@ export const navItems = [
   ["About", "#about"],
 ] as const;
 
-/** Hash links that still work from /faq and /privacy. */
+/** Hash links that still work from /privacy. */
 export function homeSectionHref(hash: `#${string}`, pathname = "/") {
   return pathname === "/" ? hash : `/${hash}`;
 }
@@ -104,37 +104,3 @@ export type EnquiryCategory =
   | "repairBusinessSetup"
   | "institutionalTraining"
   | "consultancy";
-
-/** Verified trust signals for the homepage marquee (no invented claims). */
-export const trustMarqueeItems = [
-  {
-    id: "established",
-    icon: "shield",
-    label: "Since 2020",
-    sublabel: "Hands-on experience",
-  },
-  {
-    id: "location",
-    icon: "map",
-    label: "Shop 12A, Akure",
-    sublabel: "Cash Hold Complex",
-  },
-  {
-    id: "hours",
-    icon: "clock",
-    label: "Open Mon–Sat",
-    sublabel: "8:00 AM–6:00 PM",
-  },
-  {
-    id: "diagnosis",
-    icon: "wrench",
-    label: "Diagnosis first",
-    sublabel: "Approve price first",
-  },
-  {
-    id: "whatsapp",
-    icon: "whatsapp",
-    label: "WhatsApp enquiries",
-    sublabel: "Fastest contact path",
-  },
-] as const;

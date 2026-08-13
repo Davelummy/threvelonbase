@@ -69,7 +69,7 @@ test("metadata, sitemap and robots helpers share the absolute site URL path", as
   assert.match(homepage, /canonical:\s*"\/"/);
   assert.match(homepage, /\.\.\.\(homepageUrl \? \{ url: homepageUrl \} : \{\}\)/);
   assert.match(robots, /absoluteSiteUrl\("\/sitemap\.xml"\)/);
-  assert.match(sitemap, /"\/faq"/);
+  assert.doesNotMatch(sitemap, /"\/faq"/);
   assert.match(sitemap, /"\/privacy"/);
   assert.match(jsonLd, /absoluteSiteUrl\("\/"\)/);
   assert.match(jsonLd, /url: homepageUrl/);

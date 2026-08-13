@@ -5,7 +5,7 @@ import "./globals.css";
 import { LocalBusinessJsonLd } from "./components/brand/LocalBusinessJsonLd";
 import { Footer } from "./components/layout/Footer";
 import { SiteHeader } from "./components/layout/SiteHeader";
-import { FloatingWhatsApp } from "./components/sections/HomeSections";
+import { FloatingWhatsApp } from "./components/brand/FloatingWhatsApp";
 import { themeBootstrapScript } from "./components/theme/ThemeToggle";
 import { business, siteOrigin } from "./data/business";
 import { homepageDescription, homepageTitle } from "./data/content";

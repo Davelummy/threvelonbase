@@ -63,6 +63,12 @@ test("renders production metadata and structured local business data", () => {
   assert.match(html, /["']@type["']:["']LocalBusiness["']/i);
 });
 
+test("omits the trust marquee and values section", () => {
+  assert.doesNotMatch(html, /trust-marquee/);
+  assert.doesNotMatch(html, /Technical care shaped by clear values/);
+  assert.match(html, /id=["']about["']/);
+});
+
 test("weights the repair service card and keeps the secondary hero as a text path", () => {
   assert.match(html, /service-card-featured/);
   assert.match(html, /hero-secondary-link/);
@@ -76,6 +82,11 @@ test("prints the motto once in the footer brand, not under the wordmark", () => 
   assert.equal(motto.length, 1);
   assert.match(footer[0], /footer-tagline/);
   assert.match(footer[0], /wordmark-compact/);
+});
+
+test("does not invent a timed repair promise", () => {
+  assert.doesNotMatch(html, /five-minute fix/i);
+  assert.match(html, /From routine component repairs to complex board work\./);
 });
 
 test("keeps the repair-first H1, CTA, and section anchors", () => {
@@ -229,6 +240,9 @@ test("serves distinct WebP hero, featured repair, and academy assets", () => {
   assert.match(html, /threvelonbase-repair-hero\.webp/);
   assert.match(html, /threvelonbase-repair-featured\.webp/);
   assert.match(html, /threvelonbase-academy-hands-on\.webp/);
+  assert.match(html, /threvelonbase-devices-wall\.webp/);
+  assert.match(html, /threvelonbase-accessories-wall\.webp/);
+  assert.match(html, /commerce-glass/);
   assert.doesNotMatch(html, /threvelonbase-repair-hero\.png/);
   assert.doesNotMatch(html, /threvelonbase-academy-hands-on\.jpg/);
 });
@@ -249,10 +263,11 @@ test("renders FAQ answers and legal page links without inventing prices or warra
   const footer = html.match(/<footer\b[\s\S]*?<\/footer>/i);
   assert.ok(main, "landing page main should be present");
   assert.ok(footer, "footer should be present");
-  assert.match(main[0], /href=["']\/faq["']/);
+  assert.match(html, /["']@type["']:["']FAQPage["']/);
   assert.match(main[0], /href=["']\/privacy["']/);
-  assert.match(footer[0], /href=["']\/faq["']/);
   assert.match(footer[0], /href=["']\/privacy["']/);
+  assert.doesNotMatch(footer[0], /href=["']\/faq["']/);
+  assert.doesNotMatch(main[0], /href=["']\/faq["']/);
 });
 
 test("sticks a single glass header to the top of the page", () => {

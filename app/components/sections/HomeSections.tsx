@@ -138,7 +138,7 @@ export function RepairsSection() {
       <div className="shell repair-grid">
         <div className="repair-copy gs-hidden" data-gs="fade-left">
           <p className="eyebrow light"><span /> Repair expertise</p>
-          <h2>From a five-minute fix to complex board work.</h2>
+          <h2>From routine component repairs to complex board work.</h2>
           <p>Every job starts with diagnosis. The cost and estimated repair time depend on the fault, the required part and the work involved.</p>
           <div className="repair-device-list">
             <span><Smartphone aria-hidden="true" /> Phones & tablets</span><span><Laptop aria-hidden="true" /> Laptops</span><span><Headphones aria-hidden="true" /> Audio devices</span><span><BatteryCharging aria-hidden="true" /> Power banks</span>
@@ -155,7 +155,7 @@ export function RepairsSection() {
 
 export function ProcessSection() {
   return (
-    <section className="process section">
+    <section className="process section" id="about">
       <div className="shell">
         <div className="section-heading centered-heading gs-hidden" data-gs="fade-up">
           <p className="eyebrow"><span /> How it works</p>
@@ -190,8 +190,6 @@ export function RepairRequestSection() {
           <p className="request-privacy">
             This page does not store repair form submissions in a website account or database. Continuing hands your reviewed message to WhatsApp on your device.{" "}
             <Link href="/privacy">Privacy</Link>
-            {" · "}
-            <Link href="/faq">FAQ</Link>
           </p>
         </div>
         <div className="gs-hidden" data-gs="fade-right">
@@ -207,48 +205,70 @@ export function CommerceSection() {
     <section className="commerce section" id="devices">
       <div className="shell commerce-grid gs-hidden" data-gs="stagger">
         <article className="commerce-feature devices-card">
-          <div className="commerce-icon"><MonitorSmartphone aria-hidden="true" /></div>
-          <p className="eyebrow"><span /> Devices</p>
-          <h2>Looking for a new or used phone?</h2>
-          <p>Ask what is currently available and speak directly with the team before making a purchase decision. Choose the path that matches what you want so the workshop knows whether to discuss a new or used device.</p>
-          <div className="commerce-actions">
-            <a
-              className="button button-dark"
-              target="_blank"
-              rel="noreferrer"
-              href={enquiryWhatsappHref("phones")}
-              aria-label={withNewTabLabel("Ask about a new phone on WhatsApp")}
-            >
-              Ask about a new phone <ArrowRight aria-hidden="true" size={18} />
-              <NewTabHint />
-            </a>
-            <a
-              className="button button-secondary"
-              target="_blank"
-              rel="noreferrer"
-              href={enquiryWhatsappHref("usedPhones")}
-              aria-label={withNewTabLabel("Ask about a used phone on WhatsApp")}
-            >
-              Ask about a used phone <ArrowRight aria-hidden="true" size={18} />
-              <NewTabHint />
-            </a>
+          <Image
+            className="commerce-photo"
+            src="/images/threvelonbase-devices-wall.webp"
+            alt="A phone-store wall of smartphones and tablets on display"
+            width={900}
+            height={1200}
+            sizes="(max-width: 820px) 100vw, 50vw"
+          />
+          <div className="commerce-glass">
+            <div className="commerce-icon"><MonitorSmartphone aria-hidden="true" /></div>
+            <p className="eyebrow"><span /> Devices</p>
+            <h2>Looking for a new or used phone?</h2>
+            <p className="commerce-lede">Ask what is currently available and speak with the team before you buy.</p>
+            <div className="commerce-actions">
+              <a
+                className="button button-dark"
+                target="_blank"
+                rel="noreferrer"
+                href={enquiryWhatsappHref("phones")}
+                aria-label={withNewTabLabel("Ask about a new phone on WhatsApp")}
+              >
+                Ask about a new phone <ArrowRight aria-hidden="true" size={18} />
+                <NewTabHint />
+              </a>
+              <a
+                className="button button-secondary"
+                target="_blank"
+                rel="noreferrer"
+                href={enquiryWhatsappHref("usedPhones")}
+                aria-label={withNewTabLabel("Ask about a used phone on WhatsApp")}
+              >
+                Ask about a used phone <ArrowRight aria-hidden="true" size={18} />
+                <NewTabHint />
+              </a>
+            </div>
           </div>
         </article>
         <article className="commerce-feature accessories-card">
-          <div className="commerce-icon"><ShoppingBag aria-hidden="true" /></div>
-          <p className="eyebrow"><span /> Accessories</p>
-          <h2>Everyday essentials for your devices.</h2>
-          <p>Ask about chargers, cables, batteries, cases, screen protection, audio accessories and laptop add-ons.</p>
-          <a
-            className="button button-secondary"
-            target="_blank"
-            rel="noreferrer"
-            href={enquiryWhatsappHref("accessories")}
-            aria-label={withNewTabLabel("Ask about an accessory on WhatsApp")}
-          >
-            Ask about an accessory <ArrowRight aria-hidden="true" size={18} />
-            <NewTabHint />
-          </a>
+          <Image
+            className="commerce-photo"
+            src="/images/threvelonbase-accessories-wall.webp"
+            alt="A store wall of chargers, cables, cases and earbuds"
+            width={900}
+            height={1200}
+            sizes="(max-width: 820px) 100vw, 50vw"
+          />
+          <div className="commerce-glass">
+            <div className="commerce-icon"><ShoppingBag aria-hidden="true" /></div>
+            <p className="eyebrow"><span /> Accessories</p>
+            <h2>Everyday essentials for your devices.</h2>
+            <p className="commerce-lede">Ask about chargers, cables, batteries, cases, screen protection, audio accessories and laptop add-ons.</p>
+            <div className="commerce-actions">
+              <a
+                className="button button-secondary"
+                target="_blank"
+                rel="noreferrer"
+                href={enquiryWhatsappHref("accessories")}
+                aria-label={withNewTabLabel("Ask about an accessory on WhatsApp")}
+              >
+                Ask about an accessory <ArrowRight aria-hidden="true" size={18} />
+                <NewTabHint />
+              </a>
+            </div>
+          </div>
         </article>
       </div>
     </section>
@@ -367,26 +387,6 @@ export function BusinessSection() {
   );
 }
 
-export function ValuesSection() {
-  const values = ["Performance", "Precision", "Professionalism", "Godliness"];
-  return (
-    <section className="values section" id="about">
-      <div className="shell values-grid">
-        <div className="values-copy gs-hidden" data-gs="fade-left">
-          <p className="eyebrow light"><span /> How we work</p>
-          <h2>Technical care shaped by clear values.</h2>
-          <p>Threvelonbase began in Akure in 2020 and continues to grow around practical problem-solving, training and long-term customer trust.</p>
-        </div>
-        <div className="value-list gs-hidden" data-gs="stagger">
-          {values.map((value, index) => (
-            <div key={value}><span>0{index + 1}</span><strong>{value}</strong></div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function ContactSection() {
   return (
     <section className="contact section">
@@ -434,18 +434,4 @@ export function ContactSection() {
   );
 }
 
-export function FloatingWhatsApp() {
-  return (
-    <a
-      className="floating-whatsapp"
-      target="_blank"
-      rel="noreferrer"
-      aria-label={withNewTabLabel("Chat with Threvelonbase on WhatsApp")}
-      href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry.")}
-    >
-      <span className="floating-whatsapp-glass" aria-hidden="true" />
-      <WhatsAppIcon size={28} className="floating-whatsapp-icon" />
-      <NewTabHint />
-    </a>
-  );
-}
+

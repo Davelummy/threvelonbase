@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function assertNoHorizontalOverflow(page: Page) {
-  // Decorative layers (marquee track, footer glow) may extend layout boxes while
+  // Decorative layers (footer glow) may extend layout boxes while
   // overflow-x: clip prevents actual horizontal scrolling for users.
   const canScrollHorizontally = await page.evaluate(() => {
     const before = window.scrollX;
@@ -34,6 +34,18 @@ async function followPrimaryServicesLink(page: Page) {
   await expect(services).toBeVisible();
   await services.click();
   await expect(page.locator("#services")).toBeInViewport();
+}
+
+function boxesOverlap(
+  a: { x: number; y: number; width: number; height: number },
+  b: { x: number; y: number; width: number; height: number },
+) {
+  return !(
+    a.x + a.width <= b.x ||
+    b.x + b.width <= a.x ||
+    a.y + a.height <= b.y ||
+    b.y + b.height <= a.y
+  );
 }
 
 test.describe("Threvelonbase smoke", () => {
@@ -189,29 +201,91 @@ test.describe("Threvelonbase smoke", () => {
     const width = page.viewportSize()?.width ?? 1440;
     if (width > 820) {
       const inner = await page.locator(".header-inner").boundingBox();
+      const nav = await page.locator("#primary-navigation").boundingBox();
       const cta = await page.locator(".header-actions .nav-cta").boundingBox();
       const toggle = await page.locator(".header-actions .theme-toggle").boundingBox();
-      expect(inner && cta && toggle).toBeTruthy();
+      expect(inner && nav && cta && toggle).toBeTruthy();
       expect(cta!.x).toBeGreaterThan(inner!.x + inner!.width * 0.55);
       expect(toggle!.x).toBeGreaterThan(cta!.x);
+      const navCenter = nav!.x + nav!.width / 2;
+      const innerCenter = inner!.x + inner!.width / 2;
+      expect(Math.abs(navCenter - innerCenter)).toBeLessThan(inner!.width * 0.12);
     }
 
-    await expect(page.locator("#faq").getByRole("link", { name: "FAQ page" })).toBeVisible();
-    await expect(page.locator("#faq").getByRole("link", { name: "Privacy" })).toBeVisible();
-
-    await page.goto("/faq");
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      "Clear answers before you bring the device.",
-    );
-    await expect(page.getByText("What devices do you repair?")).toBeVisible();
-    const faqHeader = await page.locator("header.site-header").boundingBox();
-    expect(faqHeader?.y ?? -1).toBe(0);
+    await expect(page.locator("#faq")).toBeAttached();
+    await expect(page.getByRole("heading", { name: "Clear answers before you bring the device." })).toBeAttached();
 
     await page.goto("/privacy");
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       "How this website handles your information.",
     );
     await expect(page.getByText(/does not store repair form submissions/i).first()).toBeVisible();
+  });
+
+  test("floating WhatsApp button can be dragged without opening chat", async ({ page }) => {
+    await page.goto("/");
+    const fab = page.locator(".floating-whatsapp");
+    await expect(fab).toBeVisible();
+    const before = await fab.boundingBox();
+    expect(before).toBeTruthy();
+
+    const popupPromise = page.waitForEvent("popup", { timeout: 1200 }).catch(() => null);
+    await page.mouse.move(before!.x + before!.width / 2, before!.y + before!.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(
+      before!.x + before!.width / 2 - 130,
+      before!.y + before!.height / 2 - 170,
+      { steps: 10 },
+    );
+    await page.mouse.up();
+    expect(await popupPromise).toBeNull();
+
+    const after = await fab.boundingBox();
+    expect(after).toBeTruthy();
+    expect(Math.abs(after!.x - before!.x)).toBeGreaterThan(40);
+    expect(after!.x).toBeGreaterThanOrEqual(0);
+    expect(after!.y).toBeGreaterThanOrEqual(0);
+    expect(after!.x + after!.width).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + 1);
+    expect(after!.y + after!.height).toBeLessThanOrEqual((page.viewportSize()?.height ?? 0) + 1);
+
+    await page.reload();
+    await expect(fab).toBeVisible();
+    await expect
+      .poll(async () => {
+        const box = await fab.boundingBox();
+        if (!box) return 999;
+        return Math.max(Math.abs(box.x - before!.x), Math.abs(box.y - before!.y));
+      })
+      .toBeLessThan(6);
+  });
+
+  test("tablet first fold keeps the repair CTA visible and the FAB misses the form", async ({
+    page,
+  }) => {
+    await page.goto("/");
+    const width = page.viewportSize()?.width ?? 1440;
+    const height = page.viewportSize()?.height ?? 900;
+
+    if (width > 560 && width <= 820) {
+      const h1 = await page.getByRole("heading", { level: 1 }).boundingBox();
+      const cta = await page.locator(".hero-actions .button-primary").boundingBox();
+      expect(h1).toBeTruthy();
+      expect(cta).toBeTruthy();
+      expect(h1!.y + h1!.height).toBeLessThanOrEqual(height);
+      expect(cta!.y + cta!.height).toBeLessThanOrEqual(height);
+    }
+
+    if (width <= 820) {
+      await page.goto("/#repair-request");
+      const submit = page.locator("form.repair-form").getByRole("button", { name: /Continue on WhatsApp/i });
+      await expect(submit).toBeVisible();
+      await submit.scrollIntoViewIfNeeded();
+      const fab = page.locator(".floating-whatsapp");
+      await expect(fab).toBeVisible();
+      const submitBox = await submit.boundingBox();
+      const fabBox = await fab.boundingBox();
+      expect(submitBox && fabBox).toBeTruthy();
+      expect(boxesOverlap(submitBox!, fabBox!)).toBe(false);
+    }
   });
 });
