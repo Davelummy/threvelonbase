@@ -138,7 +138,7 @@ export function RepairsSection() {
       <div className="shell repair-grid">
         <div className="repair-copy gs-hidden" data-gs="fade-left">
           <p className="eyebrow light"><span /> Repair expertise</p>
-          <h2>From a five-minute fix to complex board work.</h2>
+          <h2>From routine component repairs to complex board work.</h2>
           <p>Every job starts with diagnosis. The cost and estimated repair time depend on the fault, the required part and the work involved.</p>
           <div className="repair-device-list">
             <span><Smartphone aria-hidden="true" /> Phones & tablets</span><span><Laptop aria-hidden="true" /> Laptops</span><span><Headphones aria-hidden="true" /> Audio devices</span><span><BatteryCharging aria-hidden="true" /> Power banks</span>
