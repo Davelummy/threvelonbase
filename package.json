@@ -11,7 +11,7 @@
     "start": "next start",
     "lint": "eslint . --ignore-pattern .next",
     "typecheck": "tsc --noEmit",
-    "test:contracts": "node --test tests/rendered-html.test.mjs tests/repair-enquiries.test.mjs tests/theme-storage-sync.test.mjs tests/site-seo.test.mjs tests/info-pages.test.mjs tests/fab-position.test.mjs",
+    "test:contracts": "node --test tests/rendered-html.test.mjs tests/repair-enquiries.test.mjs tests/theme-storage-sync.test.mjs tests/site-seo.test.mjs tests/info-pages.test.mjs tests/fab-position.test.mjs tests/motion-resilience.test.mjs",
     "test": "npm run build && npm run test:contracts",
     "test:e2e": "playwright test",
     "build:netlify": "npm run lint && npm run typecheck && npm run build && npm run test:contracts",

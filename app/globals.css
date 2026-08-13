@@ -391,11 +391,9 @@ body {
 .visual-chip svg { color: var(--orange); }
 .hero-note { position: absolute; z-index: 3; left: -24px; bottom: 24px; display: flex; align-items: center; gap: 10px; padding: 16px 19px; color: var(--navy); border: 1px solid var(--hero-note-border); border-radius: 10px; background: var(--hero-note-bg); backdrop-filter: blur(14px); box-shadow: 0 14px 36px rgba(11,31,51,.18); font-size: 12px; font-weight: 700; }
 .hero-note svg { color: var(--orange); }
-/* CTMDS-style GSAP hooks: hidden until motion starts (or reduced-motion). */
-.gs-hidden { opacity: 0; }
-/* Fallback if JS never runs: still readable after a short delay */
+/* Motion hook only. Do not hide essential content if client JavaScript fails. */
 @media (scripting: none) {
-  .gs-hidden { opacity: 1; }
+  .gs-hidden { opacity: 1; transform: none; }
 }
 
 /* Trust marquee — two equal groups for an exact -50% seamless loop */

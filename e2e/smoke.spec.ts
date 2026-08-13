@@ -36,6 +36,19 @@ async function followPrimaryServicesLink(page: Page) {
   await expect(page.locator("#services")).toBeInViewport();
 }
 
+async function assertEssentialContentVisible(page: Page) {
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  await expect(page.locator(".hero-actions .button-primary")).toBeVisible();
+  await expect(page.locator("#services")).toBeVisible();
+  await expect(page.locator("form.repair-form")).toBeVisible();
+  await expect(page.locator("#faq")).toBeVisible();
+  await expect(page.locator("section.contact")).toBeVisible();
+}
+
+async function paintedOpacity(page: Page, locator: ReturnType<Page["locator"]>) {
+  return locator.evaluate((el) => getComputedStyle(el).opacity);
+}
+
 function boxesOverlap(
   a: { x: number; y: number; width: number; height: number },
   b: { x: number; y: number; width: number; height: number },
@@ -318,5 +331,66 @@ test.describe("Threvelonbase smoke", () => {
       expect(submitBox && fabBox).toBeTruthy();
       expect(boxesOverlap(submitBox!, fabBox!)).toBe(false);
     }
+  });
+
+  test("normal motion leaves essential content visible", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    await assertEssentialContentVisible(page);
+    await expect.poll(async () => paintedOpacity(page, page.getByRole("heading", { level: 1 }))).toBe("1");
+  });
+
+  test("reduced motion keeps essential content visible without entrance motion", async ({
+    page,
+  }) => {
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto("/");
+    await assertEssentialContentVisible(page);
+    const heading = page.getByRole("heading", { level: 1 });
+    await expect.poll(async () => paintedOpacity(page, heading)).toBe("1");
+    const transform = await heading.evaluate((el) => getComputedStyle(el).transform);
+    expect(transform === "none" || transform === "matrix(1, 0, 0, 1, 0, 0)").toBeTruthy();
+  });
+
+  test("turning on reduced motion mid-visit reveals motion nodes", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await assertEssentialContentVisible(page);
+    await expect.poll(async () => paintedOpacity(page, page.getByRole("heading", { level: 1 }))).toBe("1");
+  });
+
+  test("scrolling away and back leaves revealed content visible", async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.goto("/");
+    const heading = page.getByRole("heading", { level: 1 });
+    await expect(heading).toBeVisible();
+    await expect.poll(async () => paintedOpacity(page, heading)).toBe("1");
+
+    await page.locator("section.contact").scrollIntoViewIfNeeded();
+    await expect(page.locator("section.contact")).toBeVisible();
+
+    await page.evaluate(() => window.scrollTo(0, 0));
+    await expect(heading).toBeVisible();
+    await expect.poll(async () => paintedOpacity(page, heading)).toBe("1");
+  });
+});
+
+test.describe("Threvelonbase without client JavaScript", () => {
+  test.use({ javaScriptEnabled: false });
+
+  test("essential content stays readable when JavaScript is disabled", async ({ page }) => {
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await assertEssentialContentVisible(page);
+    await expect.poll(async () => paintedOpacity(page, page.getByRole("heading", { level: 1 }))).toBe("1");
+  });
+});
+
+test.describe("Threvelonbase when client JavaScript requests fail", () => {
+  test("essential content stays visible if script files never load", async ({ page }) => {
+    await page.route("**/*.{js,mjs}", (route) => route.abort());
+    await page.goto("/", { waitUntil: "domcontentloaded" });
+    await assertEssentialContentVisible(page);
+    await expect.poll(async () => paintedOpacity(page, page.getByRole("heading", { level: 1 }))).toBe("1");
   });
 });
