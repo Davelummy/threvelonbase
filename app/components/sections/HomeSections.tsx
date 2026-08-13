@@ -217,7 +217,7 @@ export function CommerceSection() {
             <div className="commerce-icon"><MonitorSmartphone aria-hidden="true" /></div>
             <p className="eyebrow"><span /> Devices</p>
             <h2>Looking for a new or used phone?</h2>
-            <p>Ask what is currently available and speak directly with the team before making a purchase decision. Choose the path that matches what you want so the workshop knows whether to discuss a new or used device.</p>
+            <p className="commerce-lede">Ask what is currently available and speak with the team before you buy.</p>
             <div className="commerce-actions">
               <a
                 className="button button-dark"
@@ -255,17 +255,19 @@ export function CommerceSection() {
             <div className="commerce-icon"><ShoppingBag aria-hidden="true" /></div>
             <p className="eyebrow"><span /> Accessories</p>
             <h2>Everyday essentials for your devices.</h2>
-            <p>Ask about chargers, cables, batteries, cases, screen protection, audio accessories and laptop add-ons.</p>
-            <a
-              className="button button-secondary"
-              target="_blank"
-              rel="noreferrer"
-              href={enquiryWhatsappHref("accessories")}
-              aria-label={withNewTabLabel("Ask about an accessory on WhatsApp")}
-            >
-              Ask about an accessory <ArrowRight aria-hidden="true" size={18} />
-              <NewTabHint />
-            </a>
+            <p className="commerce-lede">Ask about chargers, cables, batteries, cases, screen protection, audio accessories and laptop add-ons.</p>
+            <div className="commerce-actions">
+              <a
+                className="button button-secondary"
+                target="_blank"
+                rel="noreferrer"
+                href={enquiryWhatsappHref("accessories")}
+                aria-label={withNewTabLabel("Ask about an accessory on WhatsApp")}
+              >
+                Ask about an accessory <ArrowRight aria-hidden="true" size={18} />
+                <NewTabHint />
+              </a>
+            </div>
           </div>
         </article>
       </div>
