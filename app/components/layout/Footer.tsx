@@ -2,7 +2,7 @@ import { AtSign, Clock3, Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import { business } from "../../data/business";
 import { navItems, rootedSectionHref } from "../../data/content";
-import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
+import { NewTabHint } from "../a11y/NewTabHint";
 import { Wordmark } from "../brand/Wordmark";
 
 const addressLine = [
@@ -68,7 +68,6 @@ export function Footer() {
                 href={business.instagram}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={withNewTabLabel("Threvelonbase on Instagram")}
               >
                 <AtSign aria-hidden="true" size={15} />
                 <span>@threvelonbase</span>
@@ -78,7 +77,6 @@ export function Footer() {
                 href={business.mapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={withNewTabLabel("Open workshop location in Maps")}
               >
                 <MapPin aria-hidden="true" size={15} />
                 <span>{addressLine}</span>
@@ -95,7 +93,6 @@ export function Footer() {
                 href={business.mapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={withNewTabLabel("Open workshop location in Maps")}
               >
                 Open in Maps
                 <NewTabHint />
@@ -114,7 +111,6 @@ export function Footer() {
                 href={business.mapsUrl}
                 target="_blank"
                 rel="noreferrer"
-                aria-label={withNewTabLabel("Open workshop location in Maps")}
               >
                 <MapPin aria-hidden="true" size={14} />
                 Shop 12A · Arakale Road

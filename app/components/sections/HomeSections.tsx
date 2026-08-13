@@ -27,7 +27,7 @@ import { business } from "../../data/business";
 import type { EnquiryCategory } from "../../data/content";
 import { repairTypes, serviceCards } from "../../data/content";
 import { enquiryWhatsappHref, whatsappHref } from "../../../lib/whatsapp";
-import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
+import { NewTabHint } from "../a11y/NewTabHint";
 import { WhatsAppIcon } from "../brand/WhatsAppIcon";
 import { RepairForm } from "../forms/RepairForm";
 
@@ -101,7 +101,6 @@ export function ServicesSection() {
                 key={service.number}
                 target={external ? "_blank" : undefined}
                 rel={external ? "noreferrer" : undefined}
-                aria-label={external ? withNewTabLabel(`${service.action}: ${service.title}`) : undefined}
               >
                 {featured ? (
                   <span className="service-featured-media" aria-hidden="true">
@@ -224,7 +223,6 @@ export function CommerceSection() {
                 target="_blank"
                 rel="noreferrer"
                 href={enquiryWhatsappHref("phones")}
-                aria-label={withNewTabLabel("Ask about a new phone on WhatsApp")}
               >
                 Ask about a new phone <ArrowRight aria-hidden="true" size={18} />
                 <NewTabHint />
@@ -234,7 +232,6 @@ export function CommerceSection() {
                 target="_blank"
                 rel="noreferrer"
                 href={enquiryWhatsappHref("usedPhones")}
-                aria-label={withNewTabLabel("Ask about a used phone on WhatsApp")}
               >
                 Ask about a used phone <ArrowRight aria-hidden="true" size={18} />
                 <NewTabHint />
@@ -262,7 +259,6 @@ export function CommerceSection() {
                 target="_blank"
                 rel="noreferrer"
                 href={enquiryWhatsappHref("accessories")}
-                aria-label={withNewTabLabel("Ask about an accessory on WhatsApp")}
               >
                 Ask about an accessory <ArrowRight aria-hidden="true" size={18} />
                 <NewTabHint />
@@ -304,7 +300,6 @@ export function AcademySection() {
             target="_blank"
             rel="noreferrer"
             href={enquiryWhatsappHref("training")}
-            aria-label={withNewTabLabel("Ask about training or apprenticeship on WhatsApp")}
           >
             Ask about the academy <ArrowRight aria-hidden="true" size={18} />
             <NewTabHint />
@@ -337,7 +332,6 @@ export function BusinessSection() {
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("repairBusinessSetup")}
-              aria-label={withNewTabLabel("Discuss repair-business setup on WhatsApp")}
             >
               Discuss repair-business setup <ArrowRight aria-hidden="true" size={16} />
               <NewTabHint />
@@ -353,7 +347,6 @@ export function BusinessSection() {
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("institutionalTraining")}
-              aria-label={withNewTabLabel("Discuss institutional training on WhatsApp")}
             >
               Discuss institutional training <ArrowRight aria-hidden="true" size={16} />
               <NewTabHint />
@@ -369,7 +362,6 @@ export function BusinessSection() {
               target="_blank"
               rel="noreferrer"
               href={enquiryWhatsappHref("consultancy")}
-              aria-label={withNewTabLabel("Discuss business consultancy on WhatsApp")}
             >
               Discuss business consultancy <ArrowRight aria-hidden="true" size={16} />
               <NewTabHint />
@@ -401,7 +393,6 @@ export function ContactSection() {
             href={business.mapsUrl}
             target="_blank"
             rel="noreferrer"
-            aria-label={withNewTabLabel("Open workshop location in Maps")}
           >
             <MapPin aria-hidden="true" />
             <address>
@@ -422,7 +413,6 @@ export function ContactSection() {
           target="_blank"
           rel="noreferrer"
           href={whatsappHref("Hello Threvelonbase, I would like to make an enquiry about a repair, phone, accessory, training, or business service.")}
-          aria-label={withNewTabLabel("Chat on WhatsApp")}
         >
           <WhatsAppIcon size={27} />
           <span><strong>Chat on WhatsApp</strong>Usually the fastest way to reach us</span>
@@ -433,5 +423,4 @@ export function ContactSection() {
     </section>
   );
 }
-
 

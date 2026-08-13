@@ -222,6 +222,37 @@ test.describe("Threvelonbase smoke", () => {
     await expect(page.getByText(/does not store repair form submissions/i).first()).toBeVisible();
   });
 
+  test("visible external links keep their text in the accessible name", async ({ page }) => {
+    await page.goto("/");
+
+    const footer = page.locator("footer");
+    await expect(footer.getByRole("link", { name: /^@threvelonbase \(opens in a new tab\)$/i })).toBeVisible();
+    await expect(footer.getByRole("link", { name: /^Open in Maps \(opens in a new tab\)$/i })).toBeVisible();
+    await expect(
+      footer.getByRole("link", {
+        name: /^Shop 12A, Cash Hold Shopping Complex, Arakale Road, Akure, Ondo State \(opens in a new tab\)$/i,
+      }),
+    ).toBeVisible();
+    await expect(
+      footer.getByRole("link", { name: /^Shop 12A · Arakale Road \(opens in a new tab\)$/i }),
+    ).toBeVisible();
+
+    await expect(
+      page.locator(".contact-details").getByRole("link", {
+        name: /^Workshop Shop 12A, Cash Hold Shopping Complex, Arakale Road, Akure, Ondo State \(opens in a new tab\)$/i,
+      }),
+    ).toBeVisible();
+
+    await expect(page.locator(".floating-whatsapp")).toHaveAccessibleName(
+      "Chat with Threvelonbase on WhatsApp (opens in a new tab)",
+    );
+    const themeToggle = page
+      .locator(".header-actions")
+      .getByRole("button", { name: /Switch to (dark|light) mode/i });
+    await expect(themeToggle).toHaveCount(1);
+    await expect(themeToggle).toHaveAccessibleName(/Switch to (dark|light) mode/i);
+  });
+
   test("floating WhatsApp button can be dragged without opening chat", async ({ page }) => {
     await page.goto("/");
     const fab = page.locator(".floating-whatsapp");
