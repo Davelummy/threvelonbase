@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { absoluteSiteUrl, business, siteOrigin } from "../data/business";
 
-export const privacyUpdated = "12 August 2026";
+const privacyUpdated = "12 August 2026";
 
 const title = "Privacy";
 const description =
