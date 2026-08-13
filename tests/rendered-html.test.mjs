@@ -63,6 +63,12 @@ test("renders production metadata and structured local business data", () => {
   assert.match(html, /["']@type["']:["']LocalBusiness["']/i);
 });
 
+test("omits the trust marquee and values section", () => {
+  assert.doesNotMatch(html, /trust-marquee/);
+  assert.doesNotMatch(html, /id=["']about["']/);
+  assert.doesNotMatch(html, /Technical care shaped by clear values/);
+});
+
 test("weights the repair service card and keeps the secondary hero as a text path", () => {
   assert.match(html, /service-card-featured/);
   assert.match(html, /hero-secondary-link/);
@@ -104,7 +110,6 @@ test("keeps the repair-first H1, CTA, and section anchors", () => {
     "#repair-request",
     "#academy",
     "#business",
-    "#about",
     "#faq",
   ]) {
     assert.match(html, new RegExp(`\\bid=["']${anchor.slice(1)}["']`, "i"));
@@ -121,7 +126,6 @@ test("renders the primary navigation with working destinations", () => {
     ["Repairs", "#repairs"],
     ["Academy", "#academy"],
     ["Business solutions", "#business"],
-    ["About", "#about"],
     ["Start a repair", "#repair-request"],
   ]) {
     assert.match(

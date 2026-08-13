@@ -365,26 +365,6 @@ export function BusinessSection() {
   );
 }
 
-export function ValuesSection() {
-  const values = ["Performance", "Precision", "Professionalism", "Godliness"];
-  return (
-    <section className="values section" id="about">
-      <div className="shell values-grid">
-        <div className="values-copy gs-hidden" data-gs="fade-left">
-          <p className="eyebrow light"><span /> How we work</p>
-          <h2>Technical care shaped by clear values.</h2>
-          <p>Threvelonbase began in Akure in 2020 and continues to grow around practical problem-solving, training and long-term customer trust.</p>
-        </div>
-        <div className="value-list gs-hidden" data-gs="stagger">
-          {values.map((value, index) => (
-            <div key={value}><span>0{index + 1}</span><strong>{value}</strong></div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function ContactSection() {
   return (
     <section className="contact section">

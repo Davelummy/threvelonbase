@@ -1,7 +1,7 @@
 import { expect, test, type Page } from "@playwright/test";
 
 async function assertNoHorizontalOverflow(page: Page) {
-  // Decorative layers (marquee track, footer glow) may extend layout boxes while
+  // Decorative layers (footer glow) may extend layout boxes while
   // overflow-x: clip prevents actual horizontal scrolling for users.
   const canScrollHorizontally = await page.evaluate(() => {
     const before = window.scrollX;

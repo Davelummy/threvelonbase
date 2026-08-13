@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { TrustMarquee } from "./components/brand/TrustMarquee";
 import { ScrollMotion } from "./components/motion/ScrollMotion";
 import {
   AcademySection,
@@ -11,7 +10,6 @@ import {
   RepairRequestSection,
   RepairsSection,
   ServicesSection,
-  ValuesSection,
 } from "./components/sections/HomeSections";
 import { FaqJsonLd, FaqSection } from "./components/sections/FaqSection";
 import { absoluteSiteUrl, siteOrigin } from "./data/business";
@@ -39,7 +37,6 @@ export default function Home() {
     <>
       <main id="main-content">
         <HeroSection />
-        <TrustMarquee />
         <ServicesSection />
         <RepairsSection />
         <ProcessSection />
@@ -47,7 +44,6 @@ export default function Home() {
         <CommerceSection />
         <AcademySection />
         <BusinessSection />
-        <ValuesSection />
         <FaqSection />
         <ContactSection />
       </main>
