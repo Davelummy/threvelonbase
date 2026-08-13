@@ -207,7 +207,7 @@ export function CommerceSection() {
         <article className="commerce-feature devices-card">
           <Image
             className="commerce-photo"
-            src="/images/threvelonbase-devices.webp"
+            src="/images/threvelonbase-devices-wall.webp"
             alt="A phone-store wall of smartphones and tablets on display"
             width={900}
             height={1200}
@@ -245,7 +245,7 @@ export function CommerceSection() {
         <article className="commerce-feature accessories-card">
           <Image
             className="commerce-photo"
-            src="/images/threvelonbase-accessories.webp"
+            src="/images/threvelonbase-accessories-wall.webp"
             alt="A store wall of chargers, cables, cases and earbuds"
             width={900}
             height={1200}
