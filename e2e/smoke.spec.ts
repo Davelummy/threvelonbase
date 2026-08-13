@@ -201,16 +201,15 @@ test.describe("Threvelonbase smoke", () => {
     const width = page.viewportSize()?.width ?? 1440;
     if (width > 820) {
       const inner = await page.locator(".header-inner").boundingBox();
-      const logo = await page.locator(".wordmark-link").boundingBox();
       const nav = await page.locator("#primary-navigation").boundingBox();
       const cta = await page.locator(".header-actions .nav-cta").boundingBox();
       const toggle = await page.locator(".header-actions .theme-toggle").boundingBox();
-      expect(inner && logo && nav && cta && toggle).toBeTruthy();
+      expect(inner && nav && cta && toggle).toBeTruthy();
       expect(cta!.x).toBeGreaterThan(inner!.x + inner!.width * 0.55);
       expect(toggle!.x).toBeGreaterThan(cta!.x);
-      const gapNavToCta = cta!.x - (nav!.x + nav!.width);
-      const gapLogoToNav = nav!.x - (logo!.x + logo!.width);
-      expect(gapNavToCta).toBeLessThan(gapLogoToNav);
+      const navCenter = nav!.x + nav!.width / 2;
+      const innerCenter = inner!.x + inner!.width / 2;
+      expect(Math.abs(navCenter - innerCenter)).toBeLessThan(inner!.width * 0.12);
     }
 
     await expect(page.locator("#faq")).toBeAttached();
