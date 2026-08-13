@@ -242,6 +242,8 @@ test("serves distinct WebP hero, featured repair, and academy assets", () => {
   assert.match(html, /threvelonbase-academy-hands-on\.webp/);
   assert.match(html, /threvelonbase-devices-wall\.webp/);
   assert.match(html, /threvelonbase-accessories-wall\.webp/);
+  assert.match(html, /\/_next\/image\?url=%2Fimages%2Fthrevelonbase-repair-hero\.webp/);
+  assert.match(html, /srcSet=/);
   assert.match(html, /commerce-glass/);
   assert.doesNotMatch(html, /threvelonbase-repair-hero\.png/);
   assert.doesNotMatch(html, /threvelonbase-academy-hands-on\.jpg/);

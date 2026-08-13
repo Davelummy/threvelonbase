@@ -4,10 +4,9 @@ import type { NextConfig } from "next";
  * Netlify production build (OpenNext adapter via @netlify/plugin-nextjs).
  */
 const nextConfig: NextConfig = {
-  // Precompressed static assets work on Netlify without a remote optimizer.
-  // next/image still provides explicit sizing and preload.
+  // Enable the Next.js image optimizer so content photos can emit srcset.
+  // Wordmark SVGs stay unoptimized at the component. See Next 16.3 Image docs.
   images: {
-    unoptimized: true,
     formats: ["image/webp", "image/avif"],
   },
   async redirects() {
