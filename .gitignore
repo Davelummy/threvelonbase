@@ -42,3 +42,9 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# local Lighthouse dumps (canonical store is /tmp/tb-perf/)
+*.report.html
+*.report.json
+*-0.trace.json
+*-0.devtoolslog.json
