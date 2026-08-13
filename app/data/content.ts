@@ -7,6 +7,7 @@ export const navItems = [
   ["Repairs", "#repairs"],
   ["Academy", "#academy"],
   ["Business solutions", "#business"],
+  ["About", "#about"],
 ] as const;
 
 /** Hash links that still work from /privacy. */

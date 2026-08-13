@@ -155,10 +155,10 @@ export function RepairsSection() {
 
 export function ProcessSection() {
   return (
-    <section className="process section">
+    <section className="process section" id="about">
       <div className="shell">
         <div className="section-heading centered-heading gs-hidden" data-gs="fade-up">
-          <p className="eyebrow"><span /> How it works</p>
+          <p className="eyebrow"><span /> About</p>
           <h2>A clearer way to start your repair.</h2>
           <p className="section-lead">
             The website collects a short repair brief, then opens WhatsApp so you can review the message and continue with the workshop.
