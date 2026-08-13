@@ -11,7 +11,7 @@ import { whatsappHref } from "../../../lib/whatsapp";
 import { NewTabHint, withNewTabLabel } from "../a11y/NewTabHint";
 import { WhatsAppIcon } from "./WhatsAppIcon";
 
-const DRAG_THRESHOLD_PX = 6;
+const DRAG_THRESHOLD_PX = 3;
 const chatHref = whatsappHref("Hello Threvelonbase, I would like to make an enquiry.");
 
 function viewportSize() {
@@ -19,6 +19,11 @@ function viewportSize() {
     width: window.innerWidth,
     height: window.innerHeight,
   };
+}
+
+function defaultCorner(size: number): FabPosition {
+  const view = viewportSize();
+  return clampFabPosition(view.width - size - 22, view.height - size - 22, size, view.width, view.height);
 }
 
 function openChat() {
@@ -36,20 +41,27 @@ export function FloatingWhatsApp() {
   }, [position]);
 
   useEffect(() => {
-    const stored = parseFabPosition(window.localStorage.getItem(FAB_STORAGE_KEY));
     const el = ref.current;
-    if (!stored || !el) return;
+    if (!el) return;
+    const size = el.offsetWidth || 58;
+    const stored = parseFabPosition(window.localStorage.getItem(FAB_STORAGE_KEY));
     const view = viewportSize();
-    setPosition(clampFabPosition(stored.x, stored.y, el.offsetWidth, view.width, view.height));
+    const next = stored
+      ? clampFabPosition(stored.x, stored.y, size, view.width, view.height)
+      : defaultCorner(size);
+    posRef.current = next;
+    setPosition(next);
   }, []);
 
   useEffect(() => {
     function reclamp() {
+      const size = ref.current?.offsetWidth ?? 58;
+      const view = viewportSize();
       setPosition((current) => {
-        if (!current) return current;
-        const size = ref.current?.offsetWidth ?? 58;
-        const view = viewportSize();
-        return clampFabPosition(current.x, current.y, size, view.width, view.height);
+        const source = current ?? defaultCorner(size);
+        const next = clampFabPosition(source.x, source.y, size, view.width, view.height);
+        posRef.current = next;
+        return next;
       });
     }
 
@@ -68,13 +80,16 @@ export function FloatingWhatsApp() {
 
     const el = ref.current;
     if (!el) return;
-    const rect = el.getBoundingClientRect();
+    el.setPointerCapture(event.pointerId);
+
+    const size = el.offsetWidth || 58;
+    const start = posRef.current ?? defaultCorner(size);
     const drag = {
       pointerId: event.pointerId,
       startX: event.clientX,
       startY: event.clientY,
-      origX: rect.left,
-      origY: rect.top,
+      origX: start.x,
+      origY: start.y,
       moved: false,
     };
 
@@ -88,18 +103,26 @@ export function FloatingWhatsApp() {
       drag.moved = true;
       moveEvent.preventDefault();
       setDragging(true);
-      const size = ref.current?.offsetWidth ?? 58;
       const view = viewportSize();
-      const next = clampFabPosition(drag.origX + dx, drag.origY + dy, size, view.width, view.height);
+      const next = clampFabPosition(
+        drag.origX + dx,
+        drag.origY + dy,
+        ref.current?.offsetWidth ?? size,
+        view.width,
+        view.height,
+      );
       posRef.current = next;
       setPosition(next);
     };
 
     const onUp = (upEvent: globalThis.PointerEvent) => {
       if (upEvent.pointerId !== drag.pointerId) return;
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-      window.removeEventListener("pointercancel", onUp);
+      document.removeEventListener("pointermove", onMove, true);
+      document.removeEventListener("pointerup", onUp, true);
+      document.removeEventListener("pointercancel", onUp, true);
+      if (el.hasPointerCapture(event.pointerId)) {
+        el.releasePointerCapture(event.pointerId);
+      }
       setDragging(false);
       if (drag.moved && posRef.current) {
         try {
@@ -112,9 +135,9 @@ export function FloatingWhatsApp() {
       openChat();
     };
 
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    window.addEventListener("pointercancel", onUp);
+    document.addEventListener("pointermove", onMove, { capture: true, passive: false });
+    document.addEventListener("pointerup", onUp, { capture: true });
+    document.addEventListener("pointercancel", onUp, { capture: true });
   }
 
   function onKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
@@ -125,7 +148,7 @@ export function FloatingWhatsApp() {
 
   const className = [
     "floating-whatsapp",
-    position ? "is-moved" : "",
+    "is-free",
     dragging ? "is-dragging" : "",
   ]
     .filter(Boolean)
@@ -136,12 +159,22 @@ export function FloatingWhatsApp() {
       ref={ref}
       type="button"
       className={className}
-      style={position ? { left: position.x, top: position.y } : undefined}
+      style={
+        position
+          ? {
+              left: position.x,
+              top: position.y,
+              right: "auto",
+              bottom: "auto",
+            }
+          : undefined
+      }
       aria-label={withNewTabLabel("Chat with Threvelonbase on WhatsApp")}
       title="Drag to move. Tap to chat on WhatsApp."
       onPointerDown={onPointerDown}
       onKeyDown={onKeyDown}
     >
+      <span className="floating-whatsapp-glow" aria-hidden="true" />
       <span className="floating-whatsapp-glass" aria-hidden="true" />
       <WhatsAppIcon size={28} className="floating-whatsapp-icon" />
       <NewTabHint />

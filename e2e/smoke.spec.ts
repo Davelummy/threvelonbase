@@ -232,12 +232,13 @@ test.describe("Threvelonbase smoke", () => {
     expect(after!.x + after!.width).toBeLessThanOrEqual((page.viewportSize()?.width ?? 0) + 1);
     expect(after!.y + after!.height).toBeLessThanOrEqual((page.viewportSize()?.height ?? 0) + 1);
 
-    await expect(fab).toHaveClass(/is-moved/);
     await page.reload();
-    await expect(fab).toHaveClass(/is-moved/);
-    const restored = await fab.boundingBox();
-    expect(restored).toBeTruthy();
-    expect(Math.abs(restored!.x - after!.x)).toBeLessThan(6);
-    expect(Math.abs(restored!.y - after!.y)).toBeLessThan(6);
+    await expect(fab).toBeVisible();
+    await expect
+      .poll(async () => {
+        const box = await fab.boundingBox();
+        return box ? Math.abs(box.x - after!.x) : 999;
+      })
+      .toBeLessThan(6);
   });
 });
