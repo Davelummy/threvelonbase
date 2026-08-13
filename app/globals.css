@@ -761,8 +761,10 @@ body {
   width: 100% !important;
   height: 100% !important;
   object-fit: cover;
-  object-position: 50% 40%;
+  object-position: 50% 38%;
 }
+.devices-card .commerce-photo { object-position: 50% 34%; }
+.accessories-card .commerce-photo { object-position: 48% 40%; }
 .commerce-glass {
   position: relative;
   z-index: 1;

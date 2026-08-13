@@ -208,7 +208,7 @@ export function CommerceSection() {
           <Image
             className="commerce-photo"
             src="/images/threvelonbase-devices.webp"
-            alt="Smartphones arranged on a workshop counter"
+            alt="A phone-store wall of smartphones and tablets on display"
             width={900}
             height={1200}
             sizes="(max-width: 820px) 100vw, 50vw"
@@ -246,7 +246,7 @@ export function CommerceSection() {
           <Image
             className="commerce-photo"
             src="/images/threvelonbase-accessories.webp"
-            alt="Chargers, cables, a case and earbuds arranged on a cloth"
+            alt="A store wall of chargers, cables, cases and earbuds"
             width={900}
             height={1200}
             sizes="(max-width: 820px) 100vw, 50vw"
