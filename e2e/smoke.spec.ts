@@ -394,3 +394,44 @@ test.describe("Threvelonbase when client JavaScript requests fail", () => {
     await expect.poll(async () => paintedOpacity(page, page.getByRole("heading", { level: 1 }))).toBe("1");
   });
 });
+
+test.describe("Threvelonbase security headers", () => {
+  function expectDocumentHeaders(headers: Record<string, string>) {
+    expect(headers["x-powered-by"]).toBeFalsy();
+    expect(headers["x-content-type-options"]).toBe("nosniff");
+    expect(headers["referrer-policy"]).toBe("strict-origin-when-cross-origin");
+    expect(headers["permissions-policy"]).toContain("camera=()");
+    expect(headers["permissions-policy"]).toContain("geolocation=()");
+    expect(headers["content-security-policy"]).toBe("frame-ancestors 'none'");
+    expect(headers["strict-transport-security"]).toBeFalsy();
+  }
+
+  test("document routes send the configured headers and hide X-Powered-By", async ({
+    request,
+  }) => {
+    const home = await request.get("/");
+    expect(home.ok()).toBeTruthy();
+    expectDocumentHeaders(home.headers());
+
+    const privacy = await request.get("/privacy");
+    expect(privacy.ok()).toBeTruthy();
+    expectDocumentHeaders(privacy.headers());
+
+    const faq = await request.get("/faq", { maxRedirects: 0 });
+    expect(faq.status()).toBeGreaterThanOrEqual(300);
+    expect(faq.status()).toBeLessThan(400);
+    expect(faq.headers()["location"]).toMatch(/\/#faq$/);
+  });
+
+  test("static images keep nosniff and do not inherit document-only policies", async ({
+    request,
+  }) => {
+    const image = await request.get("/images/threvelonbase-repair-hero.webp");
+    expect(image.ok()).toBeTruthy();
+    const headers = image.headers();
+    expect(headers["x-content-type-options"]).toBe("nosniff");
+    expect(headers["permissions-policy"]).toBeFalsy();
+    expect(headers["content-security-policy"]).toBeFalsy();
+    expect(headers["x-powered-by"]).toBeFalsy();
+  });
+});
